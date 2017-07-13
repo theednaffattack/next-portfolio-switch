@@ -1,6 +1,11 @@
 {
   "name": "next-portfolio",
   "version": "0.0.2",
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:theednaffattack/next-portfolio.git"
+  },
   "scripts": {
     "dev": "next",
     "build": "next build",
@@ -12,14 +17,14 @@
     "isomorphic-fetch": "^2.2.1",
     "next": "^3.0.1-beta.8",
     "prop-types": "^15.5.8",
-    "react": "^15.5.4",
+    "react": "^15.6.1",
     "react-apollo": "^1.1.3",
-    "react-dom": "^15.5.4",
+    "react-dom": "^15.6.1",
     "react-redux": "^5.0.5",
     "rebass": "^1.0.0-6",
     "redux": "^3.6.0",
     "styled-components": "^2.1.1"
   },
-  "author": "",
+  "author": "Eddie Naff",
   "license": "ISC"
 }

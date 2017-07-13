@@ -2,3 +2,4 @@ node_modules/
 .next/
 docs/adaptation projects
 npm-debug.log
+docs/connections.md

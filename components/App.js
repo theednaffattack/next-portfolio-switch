@@ -1,40 +1,42 @@
+import {
+  Provider,
+  Container,
+  Heading,
+  Blockquote,
+  Toolbar,
+  NavLink,
+  Flex,
+  Box
+} from 'rebass'
+
 export default ({ children }) => (
-  <main>
-    {children}
-    <style jsx global>{`
-      * {
-        font-family: Menlo, Monaco, "Lucida Console", "Liberation Mono", "DejaVu Sans Mono", "Bitstream Vera Sans Mono", "Courier New", monospace, serif;
-      }
-      body {
-        margin: 0;
-        padding: 25px 50px;
-      }
-      a {
-        color: #22BAD9;
-      }
-      p {
-        font-size: 14px;
-        line-height: 24px;
-      }
-      article {
-        margin: 0 auto;
-        max-width: 650px;
-      }
-      button {
-        align-items: center;
-        background-color: #22BAD9;
-        border: 0;
-        color: white;
-        display: flex;
-        padding: 5px 7px;
-      }
-      button:active {
-        background-color: #1B9DB7;
-        transition: background-color .3s
-      }
-      button:focus {
-        outline: none;
-      }
-    `}</style>
-  </main>
+  
+  <Provider
+  theme={{
+    font: '"Avenir Next", Helvetica, sans-serif',
+    fontSizes: [
+      12, 16, 24, 36, 48, 72
+    ],
+    breakpoints: [
+      // min-width breakpoints in ems
+      40, 52, 64
+    ],
+    space: [
+      0, 6, 12, 18, 24, 30, 36
+    ],
+    weights: [
+      400, 600
+    ],
+    colors: {
+      black: '#111',
+      white: '#fff',
+      blue: '#07c'
+    },
+  }}>
+    <main>
+      {children}
+      
+    </main>
+
+  </Provider>
 )

@@ -1,5 +1,6 @@
-import { BackgroundImage, Box, Card, Container, Flex, Heading, Subhead } from 'rebass';
+import { BackgroundImage, Box, Card, Container, Flex, Heading, Subhead, Text } from 'rebass';
 import styled from 'styled-components';
+import Link from 'next/link'
 import Header from '../components/Header'
 
 const IntroSection = styled.section`
@@ -38,8 +39,34 @@ export default ({ pathname }) => (
 
 
         <Flex wrap pt={6}>
-          <Box width={[1/2, 1/3]} p={2}>
-<Card>
+        <Box width={[1/2, 1/3]} p={2}>
+          <Link href="/twitch" prefetch>
+            <a>
+              <Card>
+                <BackgroundImage
+                  ratio={1}
+                  src='https://images.unsplash.com/photo-1462331940025-496dfbfc7564?w=2048&q=20'
+                />
+                <Subhead p={2}>
+                  Project 1
+                </Subhead>
+              </Card>
+            </a>
+          </Link>
+        </Box>
+        <Box width={[1/2, 1/3]} p={2}>
+          <Card>
+            <BackgroundImage
+              ratio={1}
+              src='https://images.unsplash.com/photo-1462331940025-496dfbfc7564?w=2048&q=20'
+            />
+            <Text p={2} f={[3,4]}>
+              twitchTV Simple
+            </Text>
+          </Card>
+        </Box>
+        <Box width={[1/2, 1/3]} p={2}>
+          <Card>
             <BackgroundImage
               ratio={1}
               src='https://images.unsplash.com/photo-1462331940025-496dfbfc7564?w=2048&q=20'
@@ -49,30 +76,8 @@ export default ({ pathname }) => (
             </Subhead>
           </Card>
         </Box>
-          <Box width={[1/2, 1/3]} p={2}>
-<Card>
-            <BackgroundImage
-              ratio={1}
-              src='https://images.unsplash.com/photo-1462331940025-496dfbfc7564?w=2048&q=20'
-            />
-            <Subhead p={2}>
-              Project 1
-            </Subhead>
-          </Card>
-        </Box>
-          <Box width={[1/2, 1/3]} p={2}>
-<Card>
-            <BackgroundImage
-              ratio={1}
-              src='https://images.unsplash.com/photo-1462331940025-496dfbfc7564?w=2048&q=20'
-            />
-            <Subhead p={2}>
-              Project 1
-            </Subhead>
-          </Card>
-        </Box>
-          <Box width={[1/2, 1/3]} p={2}>
-<Card>
+        <Box width={[1/2, 1/3]} p={2}>
+          <Card>
             <BackgroundImage
               ratio={1}
               src='https://images.unsplash.com/photo-1462331940025-496dfbfc7564?w=2048&q=20'

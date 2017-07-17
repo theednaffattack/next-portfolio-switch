@@ -1,5 +1,11 @@
 import Document, { Head, Main, NextScript } from 'next/document'
-import { ServerStyleSheet } from 'styled-components'
+import { ServerStyleSheet, injectGlobal } from 'styled-components'
+
+injectGlobal`
+  body {
+    margin: 0;
+  }
+`;
 
 export default class MyDocument extends Document {
   render () {
@@ -11,6 +17,7 @@ export default class MyDocument extends Document {
       <html>
         <Head>
           <title>eddienaff.com</title>
+          <meta name='viewport' content='width=device-width, initial-scale=1' />
           {styleTags}
         </Head>
         <body>

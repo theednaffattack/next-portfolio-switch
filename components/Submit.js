@@ -1,4 +1,5 @@
-import { gql, graphql } from 'react-apollo'
+import { gql, graphql } from 'react-apollo';
+import { Button } from 'rebass';
 
 function Submit ({ createPost }) {
   function handleSubmit (e) {
@@ -29,7 +30,7 @@ function Submit ({ createPost }) {
       <h1>Submit</h1>
       <input placeholder='title' name='title' />
       <input placeholder='url' name='url' />
-      <button type='submit'>Submit</button>
+      <Button bg='green5' p={1} type='submit'>Submit</Button>
       <style jsx>{`
         form {
           border-bottom: 1px solid #ececec;

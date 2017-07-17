@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import { Button, Heading } from 'rebass';
 import App from '../components/App'
 import * as exampleActions from '../actions/exampleActions';
 import withData from '../lib/withData';
@@ -39,21 +40,32 @@ class Example extends Component {
   }
 
   render() {
-    const exampleString = this.props.state.example.payload ? this.props.state.example.payload : 'ERROR';
+    const exampleString = this.props.state.example ? this.props.state.example.payload : '';
     return (
-      <App title="Home page">
-        <button
+      <App title="Example page">
+        <Heading is='h1' fontSize={[null, 2, 3]}>Wheres my String?</Heading>
+        <Button
+          bg='fuschia5'
+          p={1}
           onClick={() => this.changeExampleString('not the default string')}
         >
           change demo string of redux store property to 'not the default string'
-        </button>
-        <button
+        </Button>
+        <br/>
+        <Button
+          bg='pink4'
+          p={1}
           onClick={() => this.changeExampleString()}
         >
           change back to default
-        </button>
-        <h1>Where's my String?</h1>
-        <p>...{exampleString}</p>
+        </Button>
+        <p>
+          {/*   Does the 'exampleString' evaluate to an error? 
+                Is it loading?    */
+            exampleString == 'ERROR' ? 'Heeeey'      : 
+            exampleString            ? exampleString : '...loading'
+          }
+        </p>
         <h2>{ exampleString }</h2>
       </App>
     )
@@ -70,11 +82,4 @@ function mapDispatchToProps(dispatch) {
   return bindActionCreators(exampleActions, dispatch);
 }
 
-// const MyQuery = gql`query foodTrucks {
-//   foodtrucks {
-//     _id
-//     name
-//   }
-//  }`;
-// const HomeWithGraphQl = graphql(MyQuery)(Home);
 export default connect((state) => ({state}), mapDispatchToProps)(Example);

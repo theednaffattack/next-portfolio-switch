@@ -1,31 +1,29 @@
 import React from 'react'
 import { gql, graphql } from 'react-apollo'
+import { Button, Arrow, Text, Box, Flex } from 'rebass';
+import styled from 'styled-components';
+
+const VoteUpButton = styled(Button)`
+  background-color: transparent;
+  border: 1px solid #e4e4e4;
+  color: #000;
+  &:active {
+    background-color: transparent;
+  }
+`
+const VoteBox = styled(Box)`
+  // border: 1px goldenrod solid;
+`
+const PostUpVoterBorderFlex = styled(Flex)`
+  // border: 1px dashed red;
+`;
 
 function PostUpvoter ({ upvote, votes, id }) {
   return (
-    <button onClick={() => upvote(id, votes + 1)}>
-      {votes}
-      <style jsx>{`
-        button {
-          background-color: transparent;
-          border: 1px solid #e4e4e4;
-          color: #000;
-        }
-        button:active {
-          background-color: transparent;
-        }
-        button:before {
-          align-self: center;
-          border-color: transparent transparent #000000 transparent;
-          border-style: solid;
-          border-width: 0 4px 6px 4px;
-          content: "";
-          height: 0;
-          margin-right: 5px;
-          width: 0;
-        }
-      `}</style>
-    </button>
+      <PostUpVoterBorderFlex nowrap align='stretch' direction='row' w={[ 1, 1, 1 ]} p={0} m={0}  onClick={() => upvote(id, votes + 1)}>
+          <VoteBox flex='1 1 auto' w={[ 1/2, 1/2, 1/2 ]} p={0} m={0} justify='end'><Arrow direction='up' /></VoteBox>
+          <VoteBox w={[ 1/2, 1/2, 1/2 ]} p={0} m={0}><Text>{votes}</Text></VoteBox>
+      </PostUpVoterBorderFlex>
   )
 }
 

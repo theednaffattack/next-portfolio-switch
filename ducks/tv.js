@@ -54,18 +54,20 @@ function getStreamInfo () {
 // const API_URL = 'https://wind-bow.gomix.me/twitch-api/streams/freecodecamp';
 const channel1 = 'castro_1021';
 const channelArray = [
-  "ESL_SC2",
-  "OgamingSC2",
+  "esl_sc2",
+  "ogamingsc2",
   "cretetion",
   "freecodecamp",
   "storbeck",
   "habathcx",
   "RobotCaleb",
   "noobs2ninjas"
-]
-const channel = channelArray[0];
+];
+const channelsList = channelArray.join();
 const API_CLIENT_ID = 'wnt8348cs8c63hibdkiq1ps97prbjv';
-const API_URL = `https://api.twitch.tv/kraken/streams/${channel}?client_id=${API_CLIENT_ID}`;
+const API_URL = `https://api.twitch.tv/kraken/streams/?channel=${channelsList}&client_id=${API_CLIENT_ID}`;
+
+// https://api.twitch.tv/kraken/streams/channel=ESL_SC2,OgamingSC2,cretetion,habathcx,RobotCaleb,noobs2ninjas?client_id=wnt8348cs8c63hibdkiq1ps97prbjv
 
 // https://api.twitch.tv/kraken/channels/twitch?client_id=axjhfp777tflhy0yjb5sftsil
 // https://api.twitch.tv/kraken/channels/44322889
@@ -83,22 +85,22 @@ const apiStreams = 'streams/';
 
 export const getTwitch = (dispatch) => {
   return (dispatch) => {
-    // dispatch({ type: GET_CHANNEL, payload: {}})
+    dispatch({ type: GET_CHANNEL, payload: { channelArray } })
 
     jquery.getJSON(API_URL, function (data) {
-      console.log("success\n" + JSON.stringify(data, null, 2));
+      // console.log("success\n" + JSON.stringify(data, null, 2));
       dispatch({ type: GET_CHANNEL_PENDING, payload: data })
     })
     .done(function (data) {
-      console.log("second success\n"  + JSON.stringify(data, null, 2));
+      // console.log("second success\n"  + JSON.stringify(data, null, 2));
       dispatch({ type: GET_CHANNEL_FULFILLED, payload: data })
     })
     .fail(function (err) {
-      console.log("error\n" + JSON.stringify(err, null, 2));
+      // console.log("error\n" + JSON.stringify(err, null, 2));
       dispatch({ type: GET_CHANNEL_REJECTED, payload: err })
     })
     .always(function () {
-      console.log("complete");
+      console.log("ajax call complete");
     });
   }
 }
@@ -148,8 +150,15 @@ export const actions = {
 //   [GET_CHANNEL_REJECTED]      : (state, action) => state + action.payload,
 // }
 
-const initialState = {
-  tv: {},
+export const tvInitialState = {
+  esl_sc2: {},
+  ogamingsc2: {},
+  cretetion: {},
+  freecodecamp: {},
+  storbeck: {},
+  habathcx: {},
+  RobotCaleb: {},
+  noobs2ninjas: {},
   dataFetched: false,
   isFetching: false,
   error: false,
@@ -176,7 +185,7 @@ export default {
   tv: (state = initialState, {action}) => {
     switch (action.type) {
       case GET_CHANNEL:
-      console.log('reducer action')
+      // console.log('reducer action')
         return {
           ...state,
           isFetching: true

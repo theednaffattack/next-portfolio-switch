@@ -1,30 +1,37 @@
 import {
   Provider
 } from 'rebass'
+import {ThemeProvider} from 'styled-components'
+import {Grid, Col, Row} from 'react-styled-flexboxgrid'
+
+const theme = {
+  flexboxgrid: {
+    // Defaults
+    gutterWidth: 1, // rem
+    outerMargin: 2, // rem
+    container: {
+      sm: 46, // rem
+      md: 61, // rem
+      lg: 76  // rem
+    },
+    breakpoints: {
+      xs: 0,  // em
+      sm: 48, // em
+      md: 64, // em
+      lg: 75  // em
+    }
+  }
+}
 
 export default ({ children }) => (
   
-  <Provider
-  theme={{
-    font: '"Avenir Next", Helvetica, sans-serif',
-    fontSizes: [
-      12, 16, 24, 36, 48, 56
-    ],
-    breakpoints: [
-      // min-width breakpoints in em units
-      40, 52, 64, 64, 64, 64
-    ],
-    space: [
-      0, 6, 12, 18, 24, 30, 36
-    ],
-    weights: [
-      400, 600
-    ],
-  }}>
-    <main>
-      {children}
-      
-    </main>
+  <Provider theme={theme}>
+    <ThemeProvider theme={theme}>
+      <main>
+        {children}
+        
+      </main>
 
+    </ThemeProvider>
   </Provider>
 )

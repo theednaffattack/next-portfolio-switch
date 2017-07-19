@@ -1,56 +1,99 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { BackgroundImage, Button, Card, Subhead, Text } from 'rebass'
+import Link from 'next/link';
+import { Avatar, BackgroundImage, Box, Button, Card, Container, Flex, Pre, Subhead, Text } from 'rebass'
 import { getTwitch } from '../ducks/tv';
+import PanelList from './PanelList';
+import { Col, Row } from 'react-styled-flexboxgrid';
+import styled from 'styled-components';
 
-const channels = ['freecodecamp', 'test_channel', 'ESL_SC2'];
+const Thumbnail = styled.img`
+    max-width: 100%;
+    min-width: 20px;
+    height: auto;
+`;
+
+const MaxWidthDivWrap = styled.div`
+  max-width: 400x;
+`;
+
+const BorderdCol = styled(Col)`
+  border-bottom: 1px solid gray;
+`;
+
+const GrayBorder = 'border 1 px solid #eee';
+
+const GrayBorderRow = styled(Row)`
+  // border 1px solid #eee;
+`;
+
+const GoldenrodBorderAvatar = styled(Avatar)`
+  border: 3px solid goldenrod;
+  box-shadow: 1px 1px 2px gray;
+`;
 
 export class TvComp extends React.Component {
   render() {
-    const { tv, getTwitch } = this.props;
-    return (
-      <div style={{ margin: '0 auto' }}>
-        <div>
-          <h2>Caffeinate Me</h2>
-          <Button className="btn btn-success" onClick={getTwitch}>Get Twich Info!</Button>
-        </div>
-        <div className="card">
-          <div className="card-header">
-            <Text f={2}>{ 
-              !tv ? 'Request a stream!' :
-              tv.stream == undefined || tv.stream == null ? 'Mmmmmmm' :
-              tv.stream.channel.display_name
+    const { twitch, getTwitch } = this.props;
+
+    const queryList =  !twitch ? '' :
+                        !twitch.streams ? '' :
+      twitch.streams.map(function(stream, index, array){
+        let queryKey = Object.keys(stream)[0];
+        queryKey = queryKey.toString().toLowerCase()
+        const testForValue = (queryKey) => {
+          for (var i=0; i < twitch.resultStreams.length; i++) {
+            if (queryKey === twitch.resultStreams[i].channel.name){
+            return ' - ONLINE' // queryKey === twitch.resultStreams[i].channel.name
             }
-            </Text>
-            {/* {tv.dataFetched && !tv.isFetching ? <a href={tv.data.stream.channel.url} target="_blank">Online</a> : "Offline"} */}
-          
-          </div>
-          <div className="card-block card-panel">
-            <h4 className="card-title">ESL_SC2</h4>
-            {/* <h3>{tv.dataFetched && !tv.isFetching ? "Game - " + tv.data.stream.game : ""}</h3>
-            <p>{tv.dataFetched && !tv.isFetching ? "Channel status - " + tv.data.stream.channel.status : ""}</p>
-            <p className="card-text">{tv.dataFetched && !tv.isFetching ? "Viewers: " + tv.data.stream.viewers +  " Followers: " + tv.data.stream.channel.followers : ""}</p>
-             */}
-          </div>
-        </div>
-        <Card width={256}>
-          <BackgroundImage
-            ratio={1}
-            src='https://images.unsplash.com/photo-1462331940025-496dfbfc7564?w=2048&q=20'
-          />
-          <Subhead p={2}>
-            <Text color='gray6'>ESL SC2</Text> 
-          </Subhead>
-          {
-            !tv ? <Text color='orange3'>OFFLINE</Text> :
-            <Text color='blue'>ONLINE</Text> 
           }
-        </Card>
+          return ' - OFFLINE'
+          
+        }
+        return(
+          <GrayBorderRow key={index}>
+            <BorderdCol mdOffset={1} xs={2} md={1}>
+                {/* <GoldenrodBorderAvatar src={stream.channel.logo} /> */}
+            </BorderdCol>
+            <BorderdCol xs={4}>
+              <Text p={2} color='blue'>
+                { queryKey }  
+              </Text>
+            </BorderdCol>
+            <BorderdCol xs={6}>
 
+              
+                {testForValue(queryKey)}
 
+            </BorderdCol>
+          </GrayBorderRow>
+        )
+      })
+    
+    const resultList =  !twitch ? '' :
+                        !twitch.resultStreams ? '' :
+      twitch.resultStreams.map(function(stream, index){
+        return(
+          <GrayBorderRow key={index}>
+            <BorderdCol xsOffset={1} mdOffset={1} xs={2} md={1}>
+              {/* <GoldenrodBorderAvatar src={stream.channel.logo} /> */}
+            </BorderdCol>
+            <BorderdCol xs={6}>
+              <Text p={2} color='green'>
+                {twitch.resultStreams[index].channel.name}  
+              </Text>
+            </BorderdCol>
+            <BorderdCol xs={3}>eddie</BorderdCol>
+          </GrayBorderRow>
+        )
+      })
 
-        {<pre>{JSON.stringify(tv, null, 2)}</pre>}
-      </div>
+    return (
+      <Container>
+        <Col xs={12}>
+          {queryList}
+        </Col>
+      </Container>
     )
   }
 
@@ -61,9 +104,8 @@ export class TvComp extends React.Component {
 }
 
 TvComp.propTypes = {
-  tv: PropTypes.shape({
-    stream: PropTypes.object.isRequired,
-    _links: PropTypes.object.isRequired
+  twitch: PropTypes.shape({
+    streams: PropTypes.array.isRequired
   }),
   getTwitch: PropTypes.func.isRequired
 }

@@ -19,7 +19,7 @@ const mapDispatchToProps = {
 };
 
 const mapStateToProps = (state) => ({
-  tv: state.twitch.data
+  twitch: state.twitch
 });
 
 /*  Note: mapStateToProps is where you should use `reselect` to create selectors, ie:

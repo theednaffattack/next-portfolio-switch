@@ -56,6 +56,9 @@ export default ({ pathname, href, name }) => (
         <Box px={2} w={[ 1, 1/2, 1/4 ]}>
           <StyledNavLink as='a' href='/twitch' active={pathname =='/twitch' ? true : false}>TwitchTV</StyledNavLink>
         </Box>
+        <Box px={2} w={[ 1, 1/2, 1/4 ]}>
+          <StyledNavLink as='a' href='/wikisearch' active={pathname =='/wikisearch' ? true : false}>Wiki Search</StyledNavLink>
+        </Box>
       </Flex>
     </StyledToolbar>
   </Provider>

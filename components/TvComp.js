@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import Link from 'next/link';
-import { Avatar, BackgroundImage, Box, Button, Card, Container, Flex, Pre, Subhead, Text } from 'rebass'
+import { Avatar, BackgroundImage, Box, Button, Card, Container, Flex, Heading, Panel, Pre, Small, Subhead, Text } from 'rebass'
 import { getTwitch } from '../ducks/tv';
 import PanelList from './PanelList';
 import { Col, Row } from 'react-styled-flexboxgrid';
@@ -13,8 +13,9 @@ const Thumbnail = styled.img`
     height: auto;
 `;
 
-const MaxWidthDivWrap = styled.div`
-  max-width: 400x;
+const MaxWidthContainer = styled(Container)`
+  max-width: 600x;
+  width: 600px;
 `;
 
 const BorderdCol = styled(Col)`
@@ -41,32 +42,47 @@ export class TvComp extends React.Component {
       twitch.streams.map(function(stream, index, array){
         let queryKey = Object.keys(stream)[0];
         queryKey = queryKey.toString().toLowerCase()
-        const testForValue = (queryKey) => {
-          for (var i=0; i < twitch.resultStreams.length; i++) {
+        const testForChannelValue = (queryKey, responseField) => {
+          for (let i=0; i < twitch.resultStreams.length; i++) {
+            const resultStream = twitch.resultStreams[i];
+            const channel = twitch.resultStreams[i].channel;
             if (queryKey === twitch.resultStreams[i].channel.name){
-            return ' - ONLINE' // queryKey === twitch.resultStreams[i].channel.name
+              return (
+                <Row>
+                  <Col mdOffset={1} xs={2} md={1}>
+                    <GoldenrodBorderAvatar src={channel.logo} />
+                  </Col>
+                  <Col xs={4}>
+                      <Text color='green'>{channel.display_name}</Text>
+                      {resultStream.game}<br/>
+                      <Small>{resultStream.viewers} viewing</Small>
+                  </Col>
+                  <Col xs={6}>              
+                    <a href={channel.url} target='_blank'>Visit {channel.display_name}</a>
+                  </Col>
+                </Row>
+              ) // END OF RETURN queryKey === twitch.resultStreams[i].channel.name
             }
-          }
-          return ' - OFFLINE'
+          } 
+          return (
+                <Row>
+                  <Col mdOffset={1} xs={2} md={1}>
+                    <GoldenrodBorderAvatar src='http://via.placeholder.com/100x100' />
+                  </Col>
+                  <Col xs={4}>
+                      <Text color='gray7'>{queryKey}</Text>
+                  </Col>
+                  <Col xs={6}>              
+                    <Text color='gray7'>OFFLINE SUCKA</Text>
+                  </Col>
+                </Row>
+              ) // END OF RETURN queryKey === twitch.resultStreams[i].channel.name
           
         }
         return(
-          <GrayBorderRow key={index}>
-            <BorderdCol mdOffset={1} xs={2} md={1}>
-                {/* <GoldenrodBorderAvatar src={stream.channel.logo} /> */}
-            </BorderdCol>
-            <BorderdCol xs={4}>
-              <Text p={2} color='blue'>
-                { queryKey }  
-              </Text>
-            </BorderdCol>
-            <BorderdCol xs={6}>
-
-              
-                {testForValue(queryKey)}
-
-            </BorderdCol>
-          </GrayBorderRow>
+          <Panel key={index}>
+                {testForChannelValue(queryKey, 'name')}
+          </Panel>
         )
       })
     
@@ -89,11 +105,12 @@ export class TvComp extends React.Component {
       })
 
     return (
-      <Container>
+      <MaxWidthContainer>
+        <Heading is='h1'>TwitchTV</Heading>
         <Col xs={12}>
           {queryList}
         </Col>
-      </Container>
+      </MaxWidthContainer>
     )
   }
 

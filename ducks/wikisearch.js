@@ -23,18 +23,24 @@ export const GET_WIKI_REJECTED = 'GET_WIKI_REJECTED'
 //&gsrsearch=`;
 const GENERATOR_TYPE = 'random';
 const SEARCH_FLAG_AND_VALUE = '';
-const API_CLIENT_ID = 'wnt8348cs8c63hibdkiq1ps97prbjv';
+// const API_CLIENT_ID = 'wnt8348cs8c63hibdkiq1ps97prbjv';
 const EXAMPLE_API_URI = 'https://en.wikipedia.org/w/api.php?origin=*&format=json&action=query&generator=search&gsrnamespace=0&gsrlimit=10&prop=pageimages|extracts&pilimit=max&exintro&explaintext&exsentences=1&exlimit=max&gsrsearch=';
 const API_URL_BEG = 'https://en.wikipedia.org/w/api.php?origin=*&format=json&action=query&generator=';
 const API_URL_END = '&gsrnamespace=0&gsrlimit=10&prop=pageimages|extracts&pilimit=max&exintro&explaintext&exsentences=1&exlimit=max';
-const FULL_API_URL = `https://en.wikipedia.org/w/api.php?origin=*&format=json&action=query&generator=${GENERATOR_TYPE}&gsrnamespace=0&gsrlimit=10&prop=pageimages|extracts&pilimit=max&exintro&explaintext&exsentences=1&exlimit=max`;
+// const FULL_API_URL = `https://en.wikipedia.org/w/api.php?origin=*&format=json&action=query&generator=${GENERATOR_TYPE}&prop=info&inprop=url&gsrnamespace=0&gsrlimit=10&prop=pageimages|extracts&pilimit=max&exintro&explaintext&exsentences=1&exlimit=max`;
 
 export const getWiki = (dispatch) => {
+  // let args = ...
+  // const searchValue = searchBoxValue
+  const searchOptions = dispatch;
+
+  console.log('Dispatched search options = ' + searchOptions);
+
+  const FULL_API_URL = `https://en.wikipedia.org/w/api.php?origin=*&format=json&action=query&generator=${searchOptions}&prop=info&gsrnamespace=0&gsrlimit=10&prop=pageimages|extracts&pilimit=max&exintro&explaintext&exsentences=1&exlimit=max`;
   return (dispatch) => {
     dispatch({ type: GET_WIKI, payload: { FULL_API_URL } })
-
     jquery.getJSON(FULL_API_URL, function (data) {
-      console.log("success\n" + JSON.stringify(data, null, 2));
+      data.length < 0 ? dispatch({ type: GET_WIKI_PENDING, payload: {item1: 'no data!'} }) :
       dispatch({ type: GET_WIKI_PENDING, payload: data })
     })
     .done(function (data) {

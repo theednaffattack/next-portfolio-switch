@@ -33,3 +33,8 @@ theme={{
       400, 600
     ],
   }}
+
+  ### Random
+
+  Pretty cool stack overflow answer on deep object access
+  https://stackoverflow.com/questions/11922383/access-process-nested-objects-arrays-or-json

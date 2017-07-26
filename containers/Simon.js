@@ -3,26 +3,27 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import {
-  Avatar, 
-  BackgroundImage, 
-  Box, 
-  Button, 
-  Card, 
-  Container, 
-  Flex, 
-  Heading, 
-  Input, 
-  Panel, 
-  Pre, 
-  Small, 
-  Subhead, 
+  Avatar,
+  BackgroundImage,
+  Box,
+  Button,
+  Card,
+  Container,
+  Flex,
+  Heading,
+  Input,
+  Panel,
+  Pre,
+  Small,
+  Subhead,
+  Switch,
   Text
 } from 'rebass';
 import { Col, Row } from 'react-styled-flexboxgrid';
 import styled from 'styled-components';
 import App from '../components/App'
 import Gameset from '../components/Gameset'
-import  { initGameset, makeChoice, playQueueAnswers }  from '../ducks/simon';
+import  { initGameset, makeChoice, playQueueAnswers, resetGameset }  from '../ducks/simon';
 
 const BoxSimon = styled(Box)`
   border: 2px green solid;
@@ -86,6 +87,11 @@ class Simon extends Component {
     }
   };
 
+  handleGameStart(dispatch) {
+    const { resetGameset } = this.props;
+    resetGameset()
+  }
+
   handleClick(dispatch) {
     const { makeChoice } = this.props;
     const count = this.props.simon.playCount;
@@ -94,8 +100,6 @@ class Simon extends Component {
     const computerChoiceArray = this.props.simon.gameset
     console.log('Computer Choice\n---------\n' + currentComputerChoice + '\n---------\nPlayer Choice\n---------\n' + dispatch + '\n---------\nGame Count\n---------\n' + count)
     makeChoice(dispatch, count, currentComputerChoice, computerChoiceArray, guessCount)
-    
-    // playSeq(computerChoiceArray)
   }
 
   render() {
@@ -134,17 +138,20 @@ class Simon extends Component {
             <h4>Player Choices</h4>
             { choiceArray }
           </Panel>
-          <Flex wrap mx={-2} p={4}>
-            <BoxSimonWrapper p={4} w={[ 1/2 ]}>
-              <Button
-                p={4}
-                m='auto'
-                w={[ 1, 1/5 ]}
-                color='gray1'
-                bg='blue'
-                value='blue'
-                onClick={()=>this.handleClick('blue')}>Blue</Button>
+          <Panel bg='yellow' p={3}>
+            <h4>Controls</h4>
+            <Button onClick={()=>this.handleGameStart()}>Start</Button>
+            <Button>Strict</Button>
+
+              <Switch
+                // checked={checked}
+                onClick={e => update(toggle('checked'))}
+              />
                 <Pre>{this.props.simon.playCount + 1}</Pre>
+          </Panel>
+          <Flex wrap mx={-2} p={4}>
+            <BoxSimonWrapper p={4} w={[ 1/2 ]} bg='blue5' color='white' onClick={()=>this.handleClick('blue')}>
+              Blue
             </BoxSimonWrapper>
             <BoxSimonWrapper p={4} w={[ 1/2 ]}>
               <Button
@@ -156,7 +163,7 @@ class Simon extends Component {
                 value='red'
                 onClick={()=>this.handleClick('red')}>Red</Button>
             </BoxSimonWrapper>
-            <BoxSimonWrapper p={4} w={[ 1/2 ]}>
+            <BoxSimonWrapper p={4} w={[ 1/2 ]} bg='blue7'>
               <Button
                 p={4}
                 m='auto'
@@ -191,6 +198,7 @@ Simon.propTypes = {
     choiceset: PropTypes.array.isRequred,
   }),
   initGameset: PropTypes.func.isRequired,
+  resetGameset: PropTypes.func.isRequired,
   makeChoice: PropTypes.func.isRequired,
 }
 
@@ -198,6 +206,7 @@ const mapDispatchToProps = {
   initGameset,
   makeChoice,
   playQueueAnswers,
+  resetGameset
 };
 
 const mapStateToProps = (state) => ({

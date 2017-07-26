@@ -13,6 +13,9 @@ export const INC_PLAY_COUNT = 'INC_PLAY_COUNT'
 export const DETERMINE_EQUALITY = 'DETERMINE_EQUALITY'
 export const DISPALAY_ERROR = 'DISPALAY_ERROR'
 export const RESET_GUESS_COUNT = 'RESET_GUESS_COUNT'
+export const RESET_GAMESET = 'RESET_GAMESET'
+export const RESET_ERRORS = 'RESET_ERRORS'
+export const RESET_PLAY_COUNT = 'RESET_PLAY_COUNT'
 
 // ------------------------------------
 // Actions
@@ -92,7 +95,7 @@ function delayLoop(dispatch, soundArr, limit, interval, at ) {
   if (at <= limit) {
       setTimeout(function() {
           console.log(colorValue, at);
-          dispatch({ type: PLAY_QUEUE_ANSWERS, payload: 'from the loop', meta: { sound: colorValue } })
+          dispatch({ type: PLAY_QUEUE_ANSWERS, payload: colorValue, meta: { sound: colorValue } })
           dispatch({ type: RESET_GUESS_COUNT, payload: 'from the loop' }); // reset the guess count, ready for input
           delayLoop(dispatch, soundArr, limit, interval, at + 1);
       }, interval);
@@ -103,7 +106,19 @@ export const initGameset = (dispatch) => {
   const playSeries = getSeries()
   return (dispatch) => {
     dispatch({ type: INIT_GAMESET, payload: playSeries })
-    dispatch({ type: PLAY_QUEUE_ANSWERS, meta: { sound: playSeries[0] } })
+    dispatch({ type: PLAY_QUEUE_ANSWERS, payload: playSeries[0], meta: { sound: playSeries[0] } })
+  }
+}
+
+export const resetGameset = (dispatch) => {
+  const playSeries = getSeries()
+  return (dispatch) => {
+    dispatch({ type: RESET_GAMESET })
+    dispatch({ type: RESET_GUESS_COUNT })
+    dispatch({ type: RESET_ERRORS })
+    dispatch({ type: RESET_PLAY_COUNT })
+    dispatch({ type: INIT_GAMESET, payload: playSeries })
+    dispatch({ type: PLAY_QUEUE_ANSWERS, payload: playSeries[0], meta: { sound: playSeries[0] } })
   }
 }
 
@@ -119,7 +134,7 @@ export function makeChoice(dispatch, gameCount, computerChoice, computerChoices,
 
             dispatch({ type: INC_PLAY_COUNT, payload: gameCount++ });
             dispatch({ type: RESET_GUESS_COUNT }); // reset the guess count, ready for input
-            delayLoop(dispatch, computerChoices, gameCount, interval); // replay the previous game plays
+            delayLoop(dispatch, computerChoices, gameCount+1, interval); // replay the previous game plays
             // dispatch({ type: PLAY_QUEUE_ANSWERS, meta: { sound: soundColor } }) // make the next computer play
           }
     } // end inner if statement
@@ -132,6 +147,11 @@ export function makeChoice(dispatch, gameCount, computerChoice, computerChoices,
     return (dispatch, getState) => {
       dispatch({ type: DISPALAY_ERROR, payload: gameError, meta: { sound: 'error' } }); 
       dispatch({ type: RESET_GUESS_COUNT }); // reset the guess count, ready for input
+      // if (!mode == 'strict') {
+      //   // dispatch delayLoop
+      // }
+      // return
+      delayLoop(dispatch, computerChoices, gameCount +1, interval); // replay the previous game plays
     }
   }
 }

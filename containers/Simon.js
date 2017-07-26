@@ -21,8 +21,8 @@ import {
 import { Col, Row } from 'react-styled-flexboxgrid';
 import styled from 'styled-components';
 import App from '../components/App'
-import  * as wikiActions  from '../ducks/wikisearch';
-import  { getWiki }  from '../ducks/wikisearch';
+import Gameset from '../components/Gameset'
+import  { initGameset, makeChoice, playQueueAnswers }  from '../ducks/simon';
 
 const BoxSimon = styled(Box)`
   border: 2px green solid;
@@ -40,7 +40,7 @@ const MaxWidthPanel = styled(Panel)`
 `;
 
 const SharpCornersPanel = styled(Panel)`
-    border-radius: 0px;
+  border-radius: 0px;
 `;
 
 const StyledInput = styled(Input)`
@@ -66,42 +66,74 @@ class Simon extends Component {
   // };
   constructor(props) {
     super(props);
-    this.handleClick = this.handleClick.bind(this);
   }
+
   componentDidMount() {
-    const { getWiki } = this.props;
-    // getWiki();
-  }
+    const { initGameset, dispatch, simon  } = this.props;
+    const { gameErrors  } = this.props.simon;
+    
+    if (this.props.simon.gameset.length < 1) {
+      initGameset(); 
+    } 
+    return;
+  } 
 
-  handleClick(e) {
-    // do stuff
-    console.log(e.target.value)
-  }
+  playSeq = (dispatch) => {
+    const sequence = dispatch;
+    let i = 0;   
+    for (let i=0; i < sequence.length; i++){
+      playQueueAnswer(sequence[i])
+    }
+  };
 
-  /**
-   * Change the demo string to whatever you pass as a parameter.
-   * @param {string} theString - String to be passed to show in component.
-   */
-  // wikiSearch(options) {
-  //   // setString(theString);
-  //   const { getWiki } = this.props;
-  //   console.log('search options passed in wikiSearch: ' + options)
-  //   getWiki(options);
-  // }
+  handleClick(dispatch) {
+    const { makeChoice } = this.props;
+    const count = this.props.simon.playCount;
+    const guessCount = this.props.simon.choiceset.length;
+    const currentComputerChoice = this.props.simon.gameset[count];
+    const computerChoiceArray = this.props.simon.gameset
+    console.log('Computer Choice\n---------\n' + currentComputerChoice + '\n---------\nPlayer Choice\n---------\n' + dispatch + '\n---------\nGame Count\n---------\n' + count)
+    makeChoice(dispatch, count, currentComputerChoice, computerChoiceArray, guessCount)
+    
+    // playSeq(computerChoiceArray)
+  }
 
   render() {
-    const { fakeProp } = this.props;
-  
-    const clickVal = [];
+  const { simon, makeChoice, gameManager } = this.props;
 
+  const gamesetArray = !simon ? '' :
+                !simon.gameset ? '' :
+                simon.gameset.map(function(tone, index) {
+                  return (<span key={index}>No {index + 1} - {tone} || </span>);
+                });
+
+  const choiceArray = 
+                !simon ? '' :
+                !simon.choiceset ? '' :
+                simon.choiceset.map(function(tone, index) {
+                  return (<span key={index}>No {index + 1} - {tone} || </span>);
+                }) 
+                !simon ? '' :
+                !simon.gameErrors ? '' :
+                simon.gameErrors.length > 0 ? <Text color='red'>{simon.gameErrors}</Text> : ''
+
+  const clickVal = [];
     
-      const clickStore = clickVal.map(function(eachClick) {
-        return console.log("<Text color='purple'>eachClick</Text>")
-      }, this)
+  const clickStore = clickVal.map(function(eachClick) {
+    return console.log("<Text color='purple'>eachClick</Text>")
+  }, this)
     
     return (
       <App title="WikiSearch page">
         <Container>
+          <Panel bg='gray3' p={3}>
+            <h4>Computer Choices</h4>
+            { gamesetArray }
+          </Panel>
+          <Panel bg='blue3' p={3}>
+            <h4>Player Choices</h4>
+            { choiceArray }
+          </Panel>
           <Flex wrap mx={-2} p={4}>
             <BoxSimonWrapper p={4} w={[ 1/2 ]}>
               <Button
@@ -111,7 +143,8 @@ class Simon extends Component {
                 color='gray1'
                 bg='blue'
                 value='blue'
-                onClick={this.handleClick}>Blue</Button>
+                onClick={()=>this.handleClick('blue')}>Blue</Button>
+                <Pre>{this.props.simon.playCount + 1}</Pre>
             </BoxSimonWrapper>
             <BoxSimonWrapper p={4} w={[ 1/2 ]}>
               <Button
@@ -121,17 +154,17 @@ class Simon extends Component {
                 color='gray1'
                 bg='red'
                 value='red'
-                onClick={this.handleClick}>Box</Button>
+                onClick={()=>this.handleClick('red')}>Red</Button>
             </BoxSimonWrapper>
             <BoxSimonWrapper p={4} w={[ 1/2 ]}>
               <Button
                 p={4}
                 m='auto'
                 w={[ 1, 1/5 ]}
-                color='blue'
-                bg='yellow'
+                color='gray8'
+                bg='yellow4'
                 value='yellow'
-                onClick={this.handleClick}>Box</Button>
+                onClick = {()=>this.handleClick('yellow')}>Yellow</Button>
             </BoxSimonWrapper>
             <BoxSimonWrapper p={4} w={[ 1/2 ]}>
               <Button
@@ -141,7 +174,7 @@ class Simon extends Component {
                 color='gray9'
                 bg='green'
                 value='green'
-                onClick={this.handleClick}>Box</Button>
+                onClick={()=>this.handleClick('green')}>Green</Button>
             </BoxSimonWrapper>
           </Flex>
         </Container>
@@ -150,20 +183,25 @@ class Simon extends Component {
   }
 }
 
-// WikiSearch.propTypes = {
-//   wiki: PropTypes.shape({
-//     fetchedData: PropTypes.object.isRequired
-//   }),
-//   getWiki: PropTypes.func.isRequired
-// }
+Simon.propTypes = {
+  simon: PropTypes.shape({
+    gameset: PropTypes.array.isRequired,
+    playCount: PropTypes.number.isRequred,
+    gameErrors: PropTypes.string.isRequired,
+    choiceset: PropTypes.array.isRequred,
+  }),
+  initGameset: PropTypes.func.isRequired,
+  makeChoice: PropTypes.func.isRequired,
+}
 
 const mapDispatchToProps = {
-  getWiki,
+  initGameset,
+  makeChoice,
+  playQueueAnswers,
 };
 
 const mapStateToProps = (state) => ({
-  wiki: state.wiki
+  simon: state.simon,
 });
 
-// export default connect(mapStateToProps, mapDispatchToProps)(WikiSearch);
-export default Simon
+export default connect(mapStateToProps, mapDispatchToProps)(Simon);

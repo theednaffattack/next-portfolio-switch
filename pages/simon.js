@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import App from '../components/App'
 import Header from '../components/Header'
 import Simon from '../containers/Simon'
+import withData from '../lib/withData'
 
 const BoxSimon = styled(Box)`
   // min-height: 150px;
@@ -23,7 +24,7 @@ const IntroSection = styled.section`
   min-height: 500px;
 `;
 
-export default (props) => (
+export default withData((props) => (
   <App>
     <Header pathname={props.url.pathname} />
     <IntroSection>
@@ -32,4 +33,4 @@ export default (props) => (
       </Container>
     </IntroSection>
   </App>
-)
+))

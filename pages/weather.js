@@ -1,36 +1,18 @@
 import { Container } from 'rebass';
 // import axios from 'axios';
-// import { connect } from 'react-redux';
-// import { axiosGetWeather, geoPositioning, foo } from '../routeModules/Weather/modules/weather'
+import { connect } from 'react-redux';
+import { axiosGetWeather, geoPositioning, foo, getPosition } from '../routeModules/Weather/modules/weather'
 import App from '../components/App'
 import Header from '../components/Header'
-// import Weather from '../routeModules/Weather/components/Weather';
-// import withData from '../lib/withData'
+import WeatherContainer from '../full_modules/Weather/containers/WeatherContainer'
+import withData from '../lib/withData'
+import GeoDemo from '../components/GeoDemo'
 
-// const mapDispatchToProps = {
-//   axiosGetWeather,
-//   geoPositioning,
-//   foo
-// }
-
-// const mapStateToProps = (state) => ({
-//   weather : state.weather
-// })
-
-// export default connect(mapStateToProps, mapDispatchToProps)(withData((props) => (
-//   <App>
-//     <Header pathname={props.url.pathname} />
-//     <Container>
-//       <Weather />
-//     </Container>
-//   </App>
-// )))
-
-export default (props) => (
+export default withData((props) => (
   <App>
     <Header pathname={props.url.pathname} />
     <Container>
-      <div>This is fine...</div>
+      <GeoDemo />
     </Container>
   </App>
-)
+))

@@ -29,11 +29,47 @@ const BoxSimon = styled(Box)`
   border: 2px green solid;
 `;
 
-const BoxSimonWrapper = styled(Flex)`
+const BorderFlex = styled(Flex)`
   border: 2px goldenrod solid;
-  height: 150px;
 `;
-// import withData from '../lib/withData';
+
+const BoxSimonWrapperBlue = styled(Flex)`
+  height: 150px;
+  width: 150px;
+  cursor: pointer;
+  border-top-right-radius: 100%;
+  background-color: #4a9eda;
+  transform: rotate(-90deg);
+  &:hover {
+    box-shadow: inset 1px 1px 2px rgba(0, 93, 160, 1.0);
+  }
+  &:active {
+    background-color: #0077cc;
+  }
+`;
+
+const BoxSimonWrapperRed = styled(Flex)`
+  height: 150px;
+  width: 150px;
+  cursor: pointer;
+  border-top-right-radius: 100%;
+`;
+
+const BoxSimonWrapperYellow = styled(Flex)`
+  height: 150px;
+  width: 150px;
+  cursor: pointer;
+  border-top-right-radius: 100%;
+  transform: rotate(180deg);
+`;
+
+const BoxSimonWrapperGreen = styled(Flex)`
+  height: 150px;
+  width: 150px;
+  cursor: pointer;
+  border-top-right-radius: 100%;
+  transform: rotate(90deg);
+`;
 
 const MaxWidthPanel = styled(Panel)`
   max-width: 600px;
@@ -149,41 +185,47 @@ class Simon extends Component {
               />
                 <Pre>{this.props.simon.playCount + 1}</Pre>
           </Panel>
-          <Flex wrap mx={-2} p={4}>
-            <BoxSimonWrapper p={4} w={[ 1/2 ]} bg='blue5' color='white' onClick={()=>this.handleClick('blue')}>
-              Blue
-            </BoxSimonWrapper>
-            <BoxSimonWrapper p={4} w={[ 1/2 ]}>
-              <Button
-                p={4}
-                m='auto'
-                w={[ 1, 1/5 ]}
-                color='gray1'
-                bg='red'
-                value='red'
-                onClick={()=>this.handleClick('red')}>Red</Button>
-            </BoxSimonWrapper>
-            <BoxSimonWrapper p={4} w={[ 1/2 ]} bg='blue7'>
-              <Button
-                p={4}
-                m='auto'
-                w={[ 1, 1/5 ]}
-                color='gray8'
-                bg='yellow4'
-                value='yellow'
-                onClick = {()=>this.handleClick('yellow')}>Yellow</Button>
-            </BoxSimonWrapper>
-            <BoxSimonWrapper p={4} w={[ 1/2 ]}>
-              <Button
-                p={4}
-                m='auto'
-                w={[ 1, 1/5 ]}
-                color='gray9'
-                bg='green'
-                value='green'
-                onClick={()=>this.handleClick('green')}>Green</Button>
-            </BoxSimonWrapper>
-          </Flex>
+          <BorderFlex wrap mx={-2} p={4} w='400px'>
+            <BoxSimonWrapperBlue
+              p={4}
+              w={[ 1/2 ]}
+              bg='blue7'
+              color='white'
+              style={{backgroundColor: this.props.simon.isPlaying == 'blue' ? '#0077CC' : '#4a9eda'}}
+              isActive={this.props.simon.isPlaying == 'blue' ? true : false }
+              onClick={()=>this.handleClick('blue')}>
+
+              <Text>Blue</Text>
+            </BoxSimonWrapperBlue>
+            <BoxSimonWrapperRed
+              p={4}
+              w={[ 1/2 ]}
+              bg='red7'
+              color='white'
+              style={{backgroundColor: this.props.simon.isPlaying == 'red' ? '#cc0011' : '#ea969d'}}
+              onClick={()=>this.handleClick('red')}>
+
+              <Text>Red</Text>
+            </BoxSimonWrapperRed>
+            <BoxSimonWrapperYellow
+              p={4}
+              w={[ 1/2 ]}
+              bg='yellow7'
+              style={{backgroundColor: this.props.simon.isPlaying == 'yellow' ? '#e0d668' : '#f1ecba'}}
+              onClick = {()=>this.handleClick('yellow')}>
+
+              <Text>Yellow</Text>
+            </BoxSimonWrapperYellow>
+            <BoxSimonWrapperGreen
+              p={4}
+              w={[ 1/2 ]}
+              bg='green7'
+              style={{backgroundColor: this.props.simon.isPlaying == 'green' ? '#5ea200' : '#77cc00'}}
+              onClick={()=>this.handleClick('green')}>
+
+              <Text>Green</Text>
+            </BoxSimonWrapperGreen>
+          </BorderFlex>
         </Container>
       </App>  
     )
@@ -196,6 +238,8 @@ Simon.propTypes = {
     playCount: PropTypes.number.isRequred,
     gameErrors: PropTypes.string.isRequired,
     choiceset: PropTypes.array.isRequred,
+    isPlaying: PropTypes.string.isRequired,
+    // clickable: PropTypes.bool.isRequired
   }),
   initGameset: PropTypes.func.isRequired,
   resetGameset: PropTypes.func.isRequired,

@@ -54,6 +54,9 @@ export default ({ pathname, href, name }) => (
           <StyledNavLink as='a' href='/twitch' active={pathname =='/twitch' ? true : false}>TwitchTV</StyledNavLink>
         </Box>
         <Box px={2} w={[ 1, 1/2, 1/4 ]}>
+          <StyledNavLink as='a' href='/weather' active={pathname =='/weather' ? true : false}>Weather</StyledNavLink>
+        </Box>
+        <Box px={2} w={[ 1, 1/2, 1/4 ]}>
           <StyledNavLink as='a' href='/wikiviewer' active={pathname =='/wikiviewer' ? true : false}>Wiki Viewer</StyledNavLink>
         </Box>
         <Box px={2} w={[ 1, 1/2, 1/4 ]}>

@@ -16,6 +16,7 @@ export const RESET_GUESS_COUNT = 'RESET_GUESS_COUNT'
 export const RESET_GAMESET = 'RESET_GAMESET'
 export const RESET_ERRORS = 'RESET_ERRORS'
 export const RESET_PLAY_COUNT = 'RESET_PLAY_COUNT'
+export const RESET_IS_PLAYING = 'RESET_IS_PLAYING'
 
 // ------------------------------------
 // Actions
@@ -85,7 +86,7 @@ function playSound(dispatch, gameCount, computerChoices) {
 
 function soundPlayer(dispatch, gameCount, computerChoices) {
   computerChoices.forEach(function(currentValue, index, array) {
-    setTimeout(dispatch({ type: PLAY_QUEUE_ANSWERS, payload: 'sound', meta: { sound: currentValue } }), 3000, dispatch, gameCount, computerChoices);
+    setTimeout(dispatch({ type: PLAY_QUEUE_ANSWERS, payload: currentValue, meta: { sound: currentValue } }), 3000, dispatch, gameCount, computerChoices);
   })
 }
 
@@ -96,7 +97,7 @@ function delayLoop(dispatch, soundArr, limit, interval, at ) {
       setTimeout(function() {
           console.log(colorValue, at);
           dispatch({ type: PLAY_QUEUE_ANSWERS, payload: colorValue, meta: { sound: colorValue } })
-          dispatch({ type: RESET_GUESS_COUNT, payload: 'from the loop' }); // reset the guess count, ready for input
+          dispatch({ type: RESET_GUESS_COUNT, payload: '' }); // reset the guess count, ready for input
           delayLoop(dispatch, soundArr, limit, interval, at + 1);
       }, interval);
   }
@@ -107,18 +108,21 @@ export const initGameset = (dispatch) => {
   return (dispatch) => {
     dispatch({ type: INIT_GAMESET, payload: playSeries })
     dispatch({ type: PLAY_QUEUE_ANSWERS, payload: playSeries[0], meta: { sound: playSeries[0] } })
+    dispatch({ type: RESET_GUESS_COUNT, payload: '' }); // reset the guess count, ready for input
   }
 }
 
 export const resetGameset = (dispatch) => {
   const playSeries = getSeries()
   return (dispatch) => {
+    dispatch({ type: RESET_IS_PLAYING, payload: '' }); // reset the guess count, ready for input
     dispatch({ type: RESET_GAMESET })
     dispatch({ type: RESET_GUESS_COUNT })
     dispatch({ type: RESET_ERRORS })
     dispatch({ type: RESET_PLAY_COUNT })
     dispatch({ type: INIT_GAMESET, payload: playSeries })
     dispatch({ type: PLAY_QUEUE_ANSWERS, payload: playSeries[0], meta: { sound: playSeries[0] } })
+    dispatch({ type: RESET_GUESS_COUNT, payload: '' }); // reset the guess count, ready for input
   }
 }
 
@@ -135,11 +139,13 @@ export function makeChoice(dispatch, gameCount, computerChoice, computerChoices,
             dispatch({ type: INC_PLAY_COUNT, payload: gameCount++ });
             dispatch({ type: RESET_GUESS_COUNT }); // reset the guess count, ready for input
             delayLoop(dispatch, computerChoices, gameCount+1, interval); // replay the previous game plays
+            dispatch({ type: RESET_IS_PLAYING, payload: '' }); // reset the guess count, ready for input
             // dispatch({ type: PLAY_QUEUE_ANSWERS, meta: { sound: soundColor } }) // make the next computer play
           }
     } // end inner if statement
     return (dispatch, getState) => { // if you need to make another guess
       console.log('More guesses, gameCount ' + gameCount + ' guessCount ' + guessCount)
+            dispatch({ type: RESET_IS_PLAYING, payload: '' }); // reset the guess count, ready for input
       dispatch({ type: MAKE_CHOICE, payload: info, meta: { sound: soundColor } });
       // dispatch({ type: RESET_GUESS_COUNT }); // reset the guess count, ready for input
     }

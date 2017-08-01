@@ -33,18 +33,21 @@ const BorderFlex = styled(Flex)`
   border: 2px goldenrod solid;
 `;
 
+const bgColorBlue = '#4a9eda';
+const highlightColorBlue = '#0077cc'
+
 const BoxSimonWrapperBlue = styled(Flex)`
   height: 150px;
   width: 150px;
   cursor: pointer;
   border-top-right-radius: 100%;
-  background-color: #4a9eda;
+  background-color: ${bgColorBlue};
   transform: rotate(-90deg);
-  &:hover {
-    box-shadow: inset 1px 1px 2px rgba(0, 93, 160, 1.0);
-  }
   &:active {
-    background-color: #0077cc;
+    background-color: ${highlightColorBlue};
+  }
+  &.active {
+    background-color: ${highlightColorBlue};
   }
 `;
 
@@ -191,7 +194,8 @@ class Simon extends Component {
               w={[ 1/2 ]}
               bg='blue7'
               color='white'
-              style={{backgroundColor: this.props.simon.isPlaying == 'blue' ? '#0077CC' : '#4a9eda'}}
+              style={{backgroundColor: this.props.simon.isPlaying == 'blue' ? highlightColorBlue : bgColorBlue}}
+              
               isActive={this.props.simon.isPlaying == 'blue' ? true : false }
               onClick={()=>this.handleClick('blue')}>
 

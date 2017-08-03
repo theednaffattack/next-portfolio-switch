@@ -23,7 +23,7 @@ import { Col, Row } from 'react-styled-flexboxgrid';
 import styled from 'styled-components';
 import App from '../components/App'
 import Gameset from '../components/Gameset'
-import  { initGameset, makeChoice, playQueueAnswers, resetGameset, disableClicks, enableClicks }  from '../ducks/simon';
+import  { initGameset, makeChoice, playQueueAnswers, resetGameset, disableClicks, enableClicks, toggleGameMode }  from '../ducks/simon';
 
 const BoxSimon = styled(Box)`
   border: 2px green solid;
@@ -34,11 +34,18 @@ const BorderFlex = styled(Flex)`
 `;
 
 const bgColorBlue = '#4a9eda';
+const bgColorRed = '#ea969d'
+const bgColorYellow = '#f1ecba'
+const bgColorGreen = '#84e47b'
 const highlightColorBlue = '#0077cc'
+const highlightColorRed = '#cc0011'
+const highlightColorYellow = '#e0d668'
+const highlightColorGreen = '#11cc00'
 
 const BoxSimonWrapperBlue = styled(Flex)`
   height: 150px;
   width: 150px;
+  border: 8px grey solid;
   cursor:  ${props => props.clickable ? 'pointer' : 'none'};
   pointer-events: ${props => props.clickable ? 'auto' : 'none'};
   border-top-left-radius: 100%;
@@ -54,25 +61,49 @@ const BoxSimonWrapperBlue = styled(Flex)`
 const BoxSimonWrapperRed = styled(Flex)`
   height: 150px;
   width: 150px;
+  border: 8px grey solid;
   cursor:  ${props => props.clickable ? 'pointer' : 'none'};
   pointer-events: ${props => props.clickable ? 'auto' : 'none'};
   border-top-right-radius: 100%;
+  background-color: ${bgColorRed};
+  &:active {
+    background-color: ${highlightColorRed};
+  }
+  &.active {
+    background-color: ${highlightColorRed};
+  }
 `;
 
 const BoxSimonWrapperYellow = styled(Flex)`
   height: 150px;
   width: 150px;
+  border: 8px grey solid;
   cursor:  ${props => props.clickable ? 'pointer' : 'none'};
   pointer-events: ${props => props.clickable ? 'auto' : 'none'};
   border-bottom-left-radius: 100%;
+  background-color: ${bgColorYellow};
+  &:active {
+    background-color: ${highlightColorYellow};
+  }
+  &.active {
+    background-color: ${highlightColorYellow};
+  }
 `;
 
 const BoxSimonWrapperGreen = styled(Flex)`
   height: 150px;
   width: 150px;
+  border: 8px grey solid;
   cursor:  ${props => props.clickable ? 'pointer' : 'none'};
   pointer-events: ${props => props.clickable ? 'auto' : 'none'};
   border-bottom-right-radius: 100%;
+  background-color: ${bgColorGreen};
+  &:active {
+    background-color: ${highlightColorGreen};
+  }
+  &.active {
+    background-color: ${highlightColorGreen};
+  }
 `;
 
 const MaxWidthPanel = styled(Panel)`
@@ -132,14 +163,22 @@ class Simon extends Component {
     resetGameset()
   }
 
+  handleSliderToggle(dispatch) {
+    const { toggleGameMode } = this.props
+    const oppoMode = this.props.simon.mode == 'easy' ? 'strict' : 'easy'
+    toggleGameMode(dispatch, oppoMode)
+    console.log('strict toggle ' + oppoMode)
+  }
+
   handleClick(dispatch) {
     const { makeChoice } = this.props;
     const count = this.props.simon.playCount;
     const guessCount = this.props.simon.choiceset.length;
     const currentComputerChoice = this.props.simon.gameset[count];
     const computerChoiceArray = this.props.simon.gameset
+    const mode = this.props.simon.mode
     console.log('Computer Choice\n---------\n' + currentComputerChoice + '\n---------\nPlayer Choice\n---------\n' + dispatch + '\n---------\nGame Count\n---------\n' + count)
-    makeChoice(dispatch, count, currentComputerChoice, computerChoiceArray, guessCount)
+    makeChoice(dispatch, count, currentComputerChoice, computerChoiceArray, guessCount, mode)
   }
 
   render() {
@@ -181,7 +220,7 @@ class Simon extends Component {
           <Panel bg='yellow' p={3}>
             <h4>Controls</h4>
             <Button onClick={()=>this.handleGameStart()}>Start</Button>
-            <Button>Strict</Button>
+            <Button onClick={()=>this.handleSliderToggle()}>Strict</Button>
 
               <Switch
                 // checked={checked}
@@ -193,47 +232,42 @@ class Simon extends Component {
             <BoxSimonWrapperBlue
               p={4}
               w={[ 1/2 ]}
-              bg='blue7'
+              bg='blue3'
               color='white'
               style={{backgroundColor: this.props.simon.isPlaying == 'blue' ? highlightColorBlue : bgColorBlue}}
               clickable={this.props.simon.clickable}
               isActive={this.props.simon.isPlaying == 'blue' ? true : false }
               onClick={()=>this.handleClick('blue')}>
-              <Pre>{this.props.simon.clickable ? 'true' : 'nope'}</Pre>
               <Text>Blue</Text>
             </BoxSimonWrapperBlue>
             <BoxSimonWrapperRed
               p={4}
               w={[ 1/2 ]}
-              bg='red7'
+              bg='red3'
               color='white'
-              style={{backgroundColor: this.props.simon.isPlaying == 'red' ? '#cc0011' : '#ea969d'}}
+              style={{backgroundColor: this.props.simon.isPlaying == 'red' ? highlightColorRed : bgColorRed}}
               clickable={this.props.simon.clickable}
               onClick={()=>this.handleClick('red')}>
-              <Pre>{this.props.simon.clickable ? 'true' : 'nope'}</Pre>
 
               <Text>Red</Text>
             </BoxSimonWrapperRed>
             <BoxSimonWrapperYellow
               p={4}
               w={[ 1/2 ]}
-              bg='yellow7'
-              style={{backgroundColor: this.props.simon.isPlaying == 'yellow' ? '#e0d668' : '#f1ecba'}}
+              bg='yellow3'
+              style={{backgroundColor: this.props.simon.isPlaying == 'yellow' ? highlightColorYellow : bgColorYellow}}
               clickable={this.props.simon.clickable}
               onClick = {()=>this.handleClick('yellow')}>
-              <Pre>{this.props.simon.clickable ? 'true' : 'nope'}</Pre>
 
               <Text>Yellow</Text>
             </BoxSimonWrapperYellow>
             <BoxSimonWrapperGreen
               p={4}
               w={[ 1/2 ]}
-              bg='green7'
-              style={{backgroundColor: this.props.simon.isPlaying == 'green' ? '#5ea200' : '#77cc00'}}
+              bg='green2'
+              style={{backgroundColor: this.props.simon.isPlaying == 'green' ? highlightColorGreen : bgColorGreen}}
               clickable={this.props.simon.clickable}
               onClick={()=>this.handleClick('green')}>
-              <Pre>{this.props.simon.clickable ? 'true' : 'nope'}</Pre>
-
               <Text>Green</Text>
             </BoxSimonWrapperGreen>
           </BorderFlex>
@@ -250,11 +284,13 @@ Simon.propTypes = {
     gameErrors: PropTypes.string.isRequired,
     choiceset: PropTypes.array.isRequred,
     isPlaying: PropTypes.string.isRequired,
-    clickable: PropTypes.bool.isRequired
+    clickable: PropTypes.bool.isRequired,
+    mode: PropTypes.string.isRequired
   }),
   initGameset: PropTypes.func.isRequired,
   resetGameset: PropTypes.func.isRequired,
   makeChoice: PropTypes.func.isRequired,
+  toggleGameMode: PropTypes.func.isRequred
 }
 
 const mapDispatchToProps = {
@@ -263,7 +299,8 @@ const mapDispatchToProps = {
   playQueueAnswers,
   resetGameset,
   disableClicks,
-  enableClicks
+  enableClicks,
+  toggleGameMode
 };
 
 const mapStateToProps = (state) => ({

@@ -19,6 +19,7 @@ export const RESET_PLAY_COUNT = 'RESET_PLAY_COUNT'
 export const RESET_IS_PLAYING = 'RESET_IS_PLAYING'
 export const ENABLE_CLICKS = 'ENABLE_CLICKS'
 export const DISABLE_CLICKS = 'DISABLE_CLICKS'
+export const TOGGLE_GAME_MODE = 'TOGGLE_GAME_MODE'
 
 // ------------------------------------
 // Actions
@@ -58,6 +59,10 @@ function enableClicks() {
 
 function disableClicks() {
   return (dispatch) => { dispatch({ type: DISABLE_CLICKS, payload: false })}
+}
+
+export function toggleGameMode(dispatch, newMode) {
+  return (dispatch) => { dispatch({ type: TOGGLE_GAME_MODE, payload: newMode})}
 }
 
 function incPlayCount(count) {
@@ -157,7 +162,7 @@ export const resetGameset = (dispatch) => {
   }
 }
 
-export function makeChoice(dispatch, gameCount, computerChoice, computerChoices, guessCount) {
+export function makeChoice(dispatch, gameCount, computerChoice, computerChoices, guessCount, mode) {
   const gameError = 'Bzzzt! You guessed wrong playa!'
   const soundColor = dispatch;
   const interval = 600;
@@ -189,18 +194,28 @@ export function makeChoice(dispatch, gameCount, computerChoice, computerChoices,
       }, 500)
     }
   } else {
-    return (dispatch, getState) => {
-      dispatch({ type: DISPALAY_ERROR, payload: gameError, meta: { sound: 'error' } }); 
-      dispatch({ type: RESET_GUESS_COUNT }); // reset the guess count, ready for input
-      // if (!mode == 'strict') {
-      //   // dispatch delayLoop
-      // }
-      // return
-      setTimeout(() => {
-        delayLoop(dispatch, computerChoices, gameCount +1, interval); // replay the previous game plays
+    if (mode == 'easy') {
+      return (dispatch, getState) => {
+        dispatch({ type: DISPALAY_ERROR, payload: gameError, meta: { sound: 'error' } }); 
+        dispatch({ type: RESET_GUESS_COUNT }); // reset the guess count, ready for input
+        // if (!mode == 'strict') {
+        //   // dispatch delayLoop
+        // }
+        // return
+        setTimeout(() => {
+          delayLoop(dispatch, computerChoices, gameCount +1, interval); // replay the previous game plays
+        }, 700)
+      }
+    } else {
+      return (dispatch, getState) => {
+        dispatch({ type: DISPALAY_ERROR, payload: gameError, meta: { sound: 'error' } }); 
+
+        setTimeout(() => {
+          dispatch({ type: RESET_GUESS_COUNT }); // reset the guess count, ready for input
       }, 700)
     }
   }
+}
 }
 
 export const playQueueAnswer = (dispatch) => {

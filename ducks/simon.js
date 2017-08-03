@@ -17,6 +17,8 @@ export const RESET_GAMESET = 'RESET_GAMESET'
 export const RESET_ERRORS = 'RESET_ERRORS'
 export const RESET_PLAY_COUNT = 'RESET_PLAY_COUNT'
 export const RESET_IS_PLAYING = 'RESET_IS_PLAYING'
+export const ENABLE_CLICKS = 'ENABLE_CLICKS'
+export const DISABLE_CLICKS = 'DISABLE_CLICKS'
 
 // ------------------------------------
 // Actions
@@ -48,6 +50,15 @@ function getSeries() {
     }
   return series
 };
+
+function enableClicks() {
+  // do func stuff
+  return (dispatch) => { dispatch({ type: ENABLE_CLICKS, payload: true })}
+}
+
+function disableClicks() {
+  return (dispatch) => { dispatch({ type: DISABLE_CLICKS, payload: false })}
+}
 
 function incPlayCount(count) {
   return (dispatch) => { dispatch({ type: INC_PLAY_COUNT, payload: count++ }) }
@@ -96,20 +107,25 @@ function delayLoop(dispatch, soundArr, limit, interval, at ) {
   if (at <= limit) {
       setTimeout(function() {
           console.log(colorValue, at);
+          dispatch({ type: DISABLE_CLICKS, payload: false })
           dispatch({ type: PLAY_QUEUE_ANSWERS, payload: colorValue, meta: { sound: colorValue } })
-          dispatch({ type: RESET_GUESS_COUNT, payload: '' }); // reset the guess count, ready for input
+          dispatch({ type: RESET_GUESS_COUNT, payload: '' }); // reset the player guess array
 
           setTimeout(() => {
             dispatch({ type: RESET_IS_PLAYING, payload: '' })
           }, 500)
           delayLoop(dispatch, soundArr, limit, interval, at + 1);
       }, interval);
+  } else {
+    dispatch({ type: ENABLE_CLICKS, payload: true })
   }
+  
 }
 
 export const initGameset = (dispatch) => {
   const playSeries = getSeries()
   return (dispatch) => {
+    dispatch({ type: DISABLE_CLICKS, payload: false })
     dispatch({ type: INIT_GAMESET, payload: playSeries })
     dispatch({ type: PLAY_QUEUE_ANSWERS, payload: playSeries[0], meta: { sound: playSeries[0] } })
     dispatch({ type: RESET_GUESS_COUNT, payload: '' }); // reset the guess count, ready for input
@@ -117,6 +133,7 @@ export const initGameset = (dispatch) => {
     setTimeout(() => {
       dispatch({ type: RESET_IS_PLAYING, payload: '' })
     }, 500)
+    dispatch({ type: ENABLE_CLICKS, payload: true })
   }
 }
 
@@ -128,12 +145,14 @@ export const resetGameset = (dispatch) => {
     dispatch({ type: RESET_GUESS_COUNT })
     dispatch({ type: RESET_ERRORS })
     dispatch({ type: RESET_PLAY_COUNT })
+    dispatch({ type: DISABLE_CLICKS, payload: false })
     dispatch({ type: INIT_GAMESET, payload: playSeries })
     dispatch({ type: PLAY_QUEUE_ANSWERS, payload: playSeries[0], meta: { sound: playSeries[0] } })
     // dispatch({ type: RESET_GUESS_COUNT, payload: '' }); // reset the guess count, ready for input
 
     setTimeout(() => {
       dispatch({ type: RESET_IS_PLAYING, payload: '' })
+      dispatch({ type: ENABLE_CLICKS, payload: true })
     }, 500)
   }
 }
@@ -149,23 +168,22 @@ export function makeChoice(dispatch, gameCount, computerChoice, computerChoices,
             dispatch({ type: MAKE_CHOICE, payload: info, meta: { sound: soundColor } }); // play the user's choice
 
             dispatch({ type: INC_PLAY_COUNT, payload: gameCount++ });
-            dispatch({ type: RESET_GUESS_COUNT }); // reset the guess count, ready for input
+            dispatch({ type: RESET_GUESS_COUNT }); // reset the player guess array
 
             setTimeout(() => {
               dispatch({ type: RESET_IS_PLAYING, payload: '' })
             }, 300)
+
+            dispatch({ type: DISABLE_CLICKS, payload: false })
             setTimeout(() => {
               delayLoop(dispatch, computerChoices, gameCount+1, interval); // replay the previous game plays
             }, 700)
-            // dispatch({ type: RESET_IS_PLAYING, payload: '' }); // reset the guess count, ready for input
-            // dispatch({ type: PLAY_QUEUE_ANSWERS, meta: { sound: soundColor } }) // make the next computer play
           }
     } // end inner if statement
     return (dispatch, getState) => { // if you need to make another guess in the series
       console.log('More guesses, gameCount ' + gameCount + ' guessCount ' + guessCount + '\ninfo = ' + JSON.stringify(info, null, 2))
-            // dispatch({ type: RESET_IS_PLAYING, payload: '' }); // reset the guess count, ready for input
+      dispatch({ type: ENABLE_CLICKS, payload: true })
       dispatch({ type: MAKE_CHOICE, payload: info, meta: { sound: soundColor } });
-      // dispatch({ type: RESET_GUESS_COUNT }); // reset the guess count, ready for input
       setTimeout(() => {
         dispatch({ type: RESET_IS_PLAYING, payload: '' })
       }, 500)

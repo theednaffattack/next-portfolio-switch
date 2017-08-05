@@ -226,7 +226,8 @@ class Simon extends Component {
                 // checked={checked}
                 onClick={e => update(toggle('checked'))}
               />
-                <Pre>{this.props.simon.playCount + 1}</Pre>
+                <Text fontSize={5}>{this.props.simon.playCount + 1}</Text>
+                <Text fontSize={5}>{this.props.simon.mode}</Text>
           </Panel>
           <BorderFlex wrap mx={-2} p={4} w='400px'>
             <BoxSimonWrapperBlue

@@ -207,12 +207,29 @@ export function makeChoice(dispatch, gameCount, computerChoice, computerChoices,
         }, 700)
       }
     } else {
+      const playSeries = getSeries()
       return (dispatch, getState) => {
         dispatch({ type: DISPALAY_ERROR, payload: gameError, meta: { sound: 'error' } }); 
 
+
+        dispatch({ type: RESET_IS_PLAYING, payload: '' }); // reset the guess count, ready for input
+        dispatch({ type: RESET_GAMESET })
+
         setTimeout(() => {
           dispatch({ type: RESET_GUESS_COUNT }); // reset the guess count, ready for input
-      }, 700)
+        }, 700)
+        // reset action
+        dispatch({ type: RESET_ERRORS })
+        dispatch({ type: RESET_PLAY_COUNT })
+        dispatch({ type: DISABLE_CLICKS, payload: false })
+        dispatch({ type: INIT_GAMESET, payload: playSeries })
+        dispatch({ type: PLAY_QUEUE_ANSWERS, payload: playSeries[0], meta: { sound: playSeries[0] } })
+        // dispatch({ type: RESET_GUESS_COUNT, payload: '' }); // reset the guess count, ready for input
+
+        setTimeout(() => {
+          dispatch({ type: RESET_IS_PLAYING, payload: '' })
+          dispatch({ type: ENABLE_CLICKS, payload: true })
+        }, 500)
     }
   }
 }

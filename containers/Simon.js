@@ -23,7 +23,7 @@ import { Col, Row } from 'react-styled-flexboxgrid';
 import styled from 'styled-components';
 import App from '../components/App'
 import Gameset from '../components/Gameset'
-import  { initGameset, makeChoice, playQueueAnswers, resetGameset, disableClicks, enableClicks, toggleGameMode }  from '../ducks/simon';
+import  { initGameset, makeChoice, playQueueAnswers, resetGameset, disableClicks, enableClicks, toggleGameMode, toggleGameOnOff }  from '../ducks/simon';
 
 const BoxSimon = styled(Box)`
   border: 2px green solid;
@@ -144,9 +144,9 @@ class Simon extends Component {
     const { initGameset, dispatch, simon, clickable  } = this.props;
     const { gameErrors  } = this.props.simon;
     
-    if (this.props.simon.gameset.length < 1) {
-      initGameset(); 
-    } 
+    // if (this.props.simon.gameset.length < 1) {
+    //   initGameset(); 
+    // } 
     return;
   } 
 
@@ -163,11 +163,23 @@ class Simon extends Component {
     resetGameset()
   }
 
-  handleSliderToggle(dispatch) {
+  handleToggleGameMode(dispatch) {
     const { toggleGameMode } = this.props
     const oppoMode = this.props.simon.mode == 'easy' ? 'strict' : 'easy'
     toggleGameMode(dispatch, oppoMode)
     console.log('strict toggle ' + oppoMode)
+  }
+
+  handleToggleGameOnOff(dispatch) {
+    const { toggleGameOnOff, initGameset } = this.props
+    const onOff = this.props.simon.onOff == false ? true : false
+    const clickable = onOff == true ? true : false
+    toggleGameOnOff(dispatch, onOff, clickable)
+      if (onOff == true) {
+          initGameset(); 
+      } 
+    console.log('power toggle ' + JSON.stringify(onOff, null, 2))
+    console.log('clickable state ' + JSON.stringify(clickable, null, 2))
   }
 
   handleClick(dispatch) {
@@ -220,11 +232,11 @@ class Simon extends Component {
           <Panel bg='yellow' p={3}>
             <h4>Controls</h4>
             <Button onClick={()=>this.handleGameStart()}>Start</Button>
-            <Button onClick={()=>this.handleSliderToggle()}>Strict</Button>
+            <Button onClick={()=>this.handleToggleGameMode()}>Strict</Button>
 
               <Switch
-                // checked={checked}
-                onClick={e => update(toggle('checked'))}
+                checked={this.props.simon.onOff}
+                onClick={()=>this.handleToggleGameOnOff()}
               />
                 <Text fontSize={5}>{this.props.simon.playCount + 1}</Text>
                 <Text fontSize={5}>{this.props.simon.mode}</Text>
@@ -286,12 +298,14 @@ Simon.propTypes = {
     choiceset: PropTypes.array.isRequred,
     isPlaying: PropTypes.string.isRequired,
     clickable: PropTypes.bool.isRequired,
-    mode: PropTypes.string.isRequired
+    mode: PropTypes.string.isRequired,
+    onOff: PropTypes.bool.isRequred
   }),
   initGameset: PropTypes.func.isRequired,
   resetGameset: PropTypes.func.isRequired,
   makeChoice: PropTypes.func.isRequired,
-  toggleGameMode: PropTypes.func.isRequred
+  toggleGameMode: PropTypes.func.isRequred,
+  toggleGameOnOff: PropTypes.func.isRequred
 }
 
 const mapDispatchToProps = {
@@ -301,7 +315,8 @@ const mapDispatchToProps = {
   resetGameset,
   disableClicks,
   enableClicks,
-  toggleGameMode
+  toggleGameMode,
+  toggleGameOnOff
 };
 
 const mapStateToProps = (state) => ({

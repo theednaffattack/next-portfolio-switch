@@ -20,6 +20,7 @@ export const RESET_IS_PLAYING = 'RESET_IS_PLAYING'
 export const ENABLE_CLICKS = 'ENABLE_CLICKS'
 export const DISABLE_CLICKS = 'DISABLE_CLICKS'
 export const TOGGLE_GAME_MODE = 'TOGGLE_GAME_MODE'
+export const TOGGLE_GAME_ON_OFF = 'TOGGLE_GAME_ON_OFF'
 
 // ------------------------------------
 // Actions
@@ -63,6 +64,13 @@ function disableClicks() {
 
 export function toggleGameMode(dispatch, newMode) {
   return (dispatch) => { dispatch({ type: TOGGLE_GAME_MODE, payload: newMode})}
+}
+
+export function toggleGameOnOff(dispatch, powerState, clickableState) {
+  return (dispatch) => {
+    dispatch({ type: TOGGLE_GAME_ON_OFF, payload: powerState})
+    dispatch({ type: DISABLE_CLICKS, payload: clickableState })
+  }
 }
 
 function incPlayCount(count) {
@@ -130,6 +138,7 @@ function delayLoop(dispatch, soundArr, limit, interval, at ) {
 export const initGameset = (dispatch) => {
   const playSeries = getSeries()
   return (dispatch) => {
+    dispatch({ type: RESET_GAMESET })
     dispatch({ type: DISABLE_CLICKS, payload: false })
     dispatch({ type: INIT_GAMESET, payload: playSeries })
     dispatch({ type: PLAY_QUEUE_ANSWERS, payload: playSeries[0], meta: { sound: playSeries[0] } })

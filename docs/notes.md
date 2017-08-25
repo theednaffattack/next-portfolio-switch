@@ -16,8 +16,9 @@
         <a className={pathname === '/example' && 'is-active'}>Example</a>
   ```
 
-
+```javascript
 theme={{
+
     font: '"Avenir Next", Helvetica, sans-serif',
     fontSizes: [
       12, 16, 24, 36, 48, 56
@@ -32,9 +33,30 @@ theme={{
     weights: [
       400, 600
     ],
+
   }}
+```
 
-  ### Random
+## Front End Stuff to Integrate
+[React Stonecutter](https://github.com/dantrain/react-stonecutter)
+git@github.com:dantrain/react-stonecutter.git
 
-  Pretty cool stack overflow answer on deep object access
-  https://stackoverflow.com/questions/11922383/access-process-nested-objects-arrays-or-json
+[parallax.js](http://matthew.wagerfield.com/parallax/)
+git@github.com:wagerfield/parallax.git
+
+https://codepen.io/tommmyy/pen/LGJPZg
+https://github.com/wagerfield/parallax/issues/167
+
+[React Transition Group Plus](https://github.com/cheapsteak/react-transition-group-plus)
+
+## Perhaps Switch to this (next.js based) stack
+
+https://github.com/tkh44/next-hnpwa-guide-kit
+sample: https://hnpwa.life/
+
+https://emotion.sh/
+
+### Random
+
+Pretty cool stack overflow answer on deep object access
+https://stackoverflow.com/questions/11922383/access-process-nested-objects-arrays-or-json

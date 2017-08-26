@@ -1,16 +1,30 @@
-import React from 'react'
-import PropTypes from 'prop-types'
+import React from 'react';
+import PropTypes from 'prop-types';
 import Link from 'next/link';
-import { Avatar, BackgroundImage, Box, Button, Card, Container, Flex, Heading, Panel, Pre, Small, Subhead, Text } from 'rebass'
-import { getQuotes } from '../ducks/quotes';
+import {
+  Avatar,
+  BackgroundImage,
+  Box,
+  Button,
+  Card,
+  Container,
+  Flex,
+  Heading,
+  Panel,
+  Pre,
+  Small,
+  Subhead,
+  Text,
+} from 'rebass';
+// import { getQuotes } from '../ducks/quotes';
 import PanelList from './PanelList';
 import { Col, Row } from 'react-styled-flexboxgrid';
 import styled from 'styled-components';
 
 const Thumbnail = styled.img`
-    max-width: 100%;
-    min-width: 20px;
-    height: auto;
+  max-width: 100%;
+  min-width: 20px;
+  height: auto;
 `;
 
 const MaxWidthContainer = styled(Container)`
@@ -38,7 +52,15 @@ const GoldenrodBorderedDiv = styled.div`
   box-shadow: 1px 1px 2px gray;
 `;
 
-export const Quotes = ({ requestQuote, quotes }) => (
+export const Pomodoro = ({
+  requestQuote, 
+  incSessionClock,
+  decSessionClock,
+  incBreakClock,
+  decBreakClock,
+  pauseMainClock,
+  startMainClock,
+}) => (
   <div style={{ margin: '0 auto' }} >
     <GoldenrodBorderedDiv id="quote-box" className="text-center">
       <div className="wrapper" >
@@ -50,19 +72,16 @@ export const Quotes = ({ requestQuote, quotes }) => (
           </div>
         </div>
       </div>
-      <h3><em>{quotes.data.data ? quotes.data.data[0].quote : ''}</em></h3>
-      <h4 id="quote-content">{quotes.data.data ? quotes.data.data[0].author : ''}</h4>
+      <h3><em>{pomodoro ? 'hey' : pomodoro.data.data ? pomodoro.data.data[0].quote : ''}</em></h3>
+      <h4 id="quote-content">{pomodoro ? 'hey' : pomodoro.data.data ? pomodoro.data.data[0].author : ''}</h4>
     </GoldenrodBorderedDiv>
   </div>
 )
-Quotes.propTypes = {
+Pomodoro.propTypes = {
   requestQuote: PropTypes.func.isRequired,
-  quotes: PropTypes.shape({
+  pomodoro: PropTypes.shape({
     data: PropTypes.object.isRequired
   }),
 }
 
-export default Quotes
-
-
-
+export default Pomodoro;

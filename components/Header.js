@@ -65,6 +65,9 @@ export default ({ pathname, href, name }) => (
         <Box px={2} w={[ 1, 1/2, 1/4 ]}>
           <StyledNavLink as='a' href='/quotes' active={pathname =='/quotes' ? true : false}>Quotes</StyledNavLink>
         </Box>
+        <Box px={2} w={[ 1, 1/2, 1/4 ]}>
+          <StyledNavLink as='a' href='/pomodoro' active={pathname =='/pomodoro' ? true : false}>Pomodoro</StyledNavLink>
+        </Box>
       </Flex>
     </StyledToolbar>
   </Provider>

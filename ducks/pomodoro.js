@@ -1,17 +1,10 @@
-import axios from 'axios';
+import {START_TIMER} from 'redux-timer-middleware';
+import {STOP_TIMER} from 'redux-timer-middleware';
 // CAN'T CURRENTLY SHORTCUT THIS, BE CAREFUL OF NAMES
 // ------------------------------------
 // Constants
 // ------------------------------------
-export const GET_QUOTE = 'GET_QUOTE'
-export const GET_QUOTE_PENDING = 'GET_QUOTE_PENDING'
-export const GET_QUOTE_FULFILLED = 'GET_QUOTE_FULFILLED'
-export const GET_QUOTE_REJECTED = 'GET_QUOTE_REJECTED'
-
-export const GET_POSITION = 'GET_POSITION'
-export const GET_POSITION_PENDING = 'GET_POSITION_PENDING'
-export const GET_POSITION_FULFILLED = 'GET_POSITION_FULFILLED'
-export const GET_POSITION_REJECTED = 'GET_POSITION_REJECTED'
+// export const GET_QUOTE = 'GET_QUOTE';
 
 // ------------------------------------
 // Actions
@@ -21,73 +14,52 @@ export const GET_POSITION_REJECTED = 'GET_POSITION_REJECTED'
     returns a function for lazy evaluation. It is incredibly useful for
     creating async actions, especially when combined with redux-thunk! */
 
-// const API_URL = 'http://quotesondesign.com/wp-json/posts?filter[orderby]=rand&filter[posts_per_page]=1';
-const API_URL = 'https://andruxnet-random-famous-quotes.p.mashape.com/?cat=famous&count=2';
+export function incSessionClock(dispatch) {
+  return (dispatch) => {};
+};
+export const decSessionClock = function(arg) {};
+export const incBreakClock = function(arg) {};
+export const decBreakClock = function(arg) {};
 
-// from: https://gist.github.com/varmais/74586ec1854fe288d393
-const getPosition = function (options) {
-  return new Promise(function (resolve, reject) {
-    navigator.geolocation.getCurrentPosition(resolve, reject, options);
-  });
-}
-
-export function getQuote (dispatch) {
+export function startMainClock(dispatch) {
+  // const d = new Date();
+  // var distance = 60000;
+  // var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+  // var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+  // var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+  const defaultTimer = 25 * 60 // 25 minutes
+  
   return (dispatch) => {
-    // call a function to get the quote
-    // dispatch within that function
-  } // end outer return
-}
+    dispatch({
+        type: START_TIMER,
+        payload: {
+            actionName: 'START_MAIN_CLOCK',
+            timerName: 'mainTimer',
+            timerInterval: 1000,
+            timerPeriod: defaultTimer
+        }
+    });
+  };
+};
 
-export function geoPositioning (dispatch) {
+export const pauseMainClock = function(dispatch) {
   return (dispatch) => {
-    dispatch({ type: 'GET_POSITION' })
-    getPosition()
-      .then((position) => {
-        console.log('Position!!!')
-        console.log(JSON.stringify(position.coords, null, 2));
-        dispatch({ type: 'GET_POSITION_FULFILLED', payload: {position} })
-        dispatch(axiosGetQuotes())
-      })
-      .catch((error) => {
-        console.error(error.message);
-        dispatch({ type: 'GET_POSITION_REJECTED', payload: error })
-      });
-  }
-}
-// from: https://gist.github.com/varmais/74586ec1854fe288d393
-// 
+    dispatch({
+      type: STOP_TIMER,
+      payload: {
+        timerName: 'mainTimer'
+      }
+    });
+  };
+};
 
-export const requestQuote = () => ({
-  type: 'GET_QUOTE',
-  payload: axios({
-    method: 'get',
-    url: API_URL,
-    headers: {'X-Mashape-Key': 'RxgO9z4RlfmshBZcAA8CDQ5lBn2gp1j5lJfjsn3iwh7sgp85W1'}
-  })
-}) 
-
-export function axiosGetQuotes () {
-  // return (dispatch) => {
-    axios.get(API_URL)
-      .then((response) => {
-        return response;
-      })
-      .catch((error) => {
-        dispatch({ type: 'GET_QUOTE_REJECTED', payload: error })
-      })
-  }
-// }
-
-export const actions = {
-  axiosGetQuotes
-}
 
 // ------------------------------------
 // Action Handlers
 // ------------------------------------
-const ACTION_HANDLERS = {
-  [GET_QUOTE]    : (state, action) => state + action.payload
-}
+// const ACTION_HANDLERS = {
+//   [GET_QUOTE]    : (state, action) => state + action.payload
+// }
 
 // ------------------------------------
 // Reducer
@@ -101,36 +73,3 @@ const ACTION_HANDLERS = {
 
 // From: https://medium.com/react-native-training/redux-4-ways-95a130da0cdc
 
-const initialState = {
-  data: {},
-  quotes: '',
-}
-
-export default function quotesReducer (state = initialState, action) {
-  switch (action.type) {
-    case GET_QUOTE:
-      return {
-        ...state
-      }
-    case GET_QUOTE_PENDING:
-      return {
-        ...state,
-        isFetching: true
-      }
-    case GET_QUOTE_FULFILLED:
-      return {
-        ...state,
-        isFetching: false,
-        dataFetched: true,
-        data: action.payload
-      }
-    case GET_QUOTE_REJECTED:
-      return {
-        ...state,
-        isFetching: false,
-        error: true
-      }
-    default:
-      return state
-  }
-}

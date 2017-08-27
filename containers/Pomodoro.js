@@ -1,4 +1,5 @@
 import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import Pomodoro from '../components/Pomodoro';
 import {
   incSessionClock,

@@ -102,7 +102,7 @@ function playSound(dispatch, gameCount, computerChoices) {
     const x=setTimeout(function() {
       dispatch({ type: PLAY_QUEUE_ANSWERS, payload: 'sound', meta: { sound: arr[i] } })
       console.log('gameCount: ' + gameCount + ' string: ' + arr[i])
-      if (count = gameCount) {clearInterval(x)}
+      if (count = gameCount) {clearTimeout(x)}
       count++
     }, 3000);
   }

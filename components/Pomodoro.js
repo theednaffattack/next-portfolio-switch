@@ -53,7 +53,7 @@ const GoldenrodBorderedDiv = styled.div`
 `;
 
 export const Pomodoro = ({
-  requestQuote, 
+  pomodoro, 
   incSessionClock,
   decSessionClock,
   incBreakClock,
@@ -66,21 +66,29 @@ export const Pomodoro = ({
       <div className="wrapper" >
         <div className="loading-wrapper">
           <div className="loader">
-            <Button onClick={requestQuote}>
-              <i className="fa fa-angle-down"></i> Get Quote
+            <Button onClick={startMainClock}>
+              <i className="fa fa-angle-down"></i> Start Timer
+            </Button>
+            <Button onClick={pauseMainClock}>
+              <i className="fa fa-angle-down"></i> Stop Timer
             </Button>
           </div>
         </div>
       </div>
-      <h3><em>{pomodoro ? 'hey' : pomodoro.data.data ? pomodoro.data.data[0].quote : ''}</em></h3>
+      <h3><em>{pomodoro ? pomodoro.clock : pomodoro.data.data ? pomodoro.data.data[0].quote : ''}</em></h3>
       <h4 id="quote-content">{pomodoro ? 'hey' : pomodoro.data.data ? pomodoro.data.data[0].author : ''}</h4>
     </GoldenrodBorderedDiv>
   </div>
 )
 Pomodoro.propTypes = {
-  requestQuote: PropTypes.func.isRequired,
+  incSessionClock: PropTypes.func.isRequired,
+  decSessionClock: PropTypes.func.isRequired,
+  incBreakClock: PropTypes.func.isRequired,
+  decBreakClock: PropTypes.func.isRequired,
+  pauseMainClock: PropTypes.func.isRequired,
+  startMainClock: PropTypes.func.isRequired,
   pomodoro: PropTypes.shape({
-    data: PropTypes.object.isRequired
+    clock: PropTypes.number.isRequired
   }),
 }
 

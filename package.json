@@ -42,6 +42,7 @@
     "redux-promise-middleware": "^4.2.1",
     "redux-sounds": "^1.1.1",
     "redux-thunk": "^2.2.0",
+    "redux-timer-middleware": "^0.1.2",
     "styled-components": "^2.1.1",
     "webpack-bundle-analyzer": "^2.8.3"
   },

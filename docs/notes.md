@@ -49,6 +49,14 @@ https://github.com/wagerfield/parallax/issues/167
 
 [React Transition Group Plus](https://github.com/cheapsteak/react-transition-group-plus)
 
+[Jest Testing w/ NextJS](https://github.com/zeit/next.js/issues/2197)
+
+[App Folder Structure](https://medium.com/styled-components/component-folder-pattern-ee42df37ec68)
+
+[Timer Middleware](https://gist.github.com/markerikson/ca96a82d6fdb29388aca4052a9455431)
+
+[Manual Timer via Actions](https://www.codementor.io/imbhargav5/building-a-digital-timer-with-redux-6rwun5ey7)
+
 ## Perhaps Switch to this (next.js based) stack
 
 https://github.com/tkh44/next-hnpwa-guide-kit

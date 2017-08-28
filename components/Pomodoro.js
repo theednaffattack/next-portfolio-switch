@@ -88,6 +88,7 @@ Pomodoro.propTypes = {
   pauseMainClock: PropTypes.func.isRequired,
   startMainClock: PropTypes.func.isRequired,
   pomodoro: PropTypes.shape({
+    sessionClock: PropTypes.number.isRequired,
     clock: PropTypes.number.isRequired
   }),
 }

@@ -52,6 +52,14 @@ const GoldenrodBorderedDiv = styled.div`
   box-shadow: 1px 1px 2px gray;
 `;
 
+function formatTimer(time, units) {
+  const totalSecondsPassed = time;
+  const totalMinutesPassed = Math.floor(totalSecondsPassed/60);
+  const hours = Math.floor(totalMinutesPassed/60);
+  const minutes = totalMinutesPassed % 60;
+  const seconds = totalSecondsPassed % 60;
+};
+
 export const Pomodoro = ({
   pomodoro, 
   incSessionClock,
@@ -75,8 +83,11 @@ export const Pomodoro = ({
           </div>
         </div>
       </div>
-      <h3><em>{pomodoro ? pomodoro.clock : pomodoro.data.data ? pomodoro.data.data[0].quote : ''}</em></h3>
-      <h4 id="quote-content">{pomodoro ? 'hey' : pomodoro.data.data ? pomodoro.data.data[0].author : ''}</h4>
+      <h3><em>{
+        !pomodoro ? ''
+        : Math.floor(pomodoro.clock/60) % 60 < 1 ? pomodoro.clock
+        : Math.floor(pomodoro.clock/60) % 60 + ' : ' + pomodoro.clock
+      }</em></h3>
     </GoldenrodBorderedDiv>
   </div>
 )

@@ -1,13 +1,13 @@
 import { geolocated } from 'react-geolocated';
 import React from 'react';
-import { axiosGetWeather, geoPositioning, foo, getPosition } from '../routeModules/Weather/modules/weather'
+import { axiosGetWeather, geoPositioning, foo, getPosition, toggleUnits } from '../routeModules/Weather/modules/weather'
 import Weather from '../full_modules/Weather/components/Weather'
 import { Pre } from 'rebass'
 
 
 class GeoDemo extends React.Component {
   render() {
-    const { weather, coords } = this.props;
+    const { weather, coords, toggleUnits } = this.props;
     return !this.props.isGeolocationAvailable
       ? <div>Your browser does not support Geolocation</div>
       : !this.props.isGeolocationEnabled

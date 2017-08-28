@@ -99,6 +99,14 @@ export const foo = () => {
     });
   };
 }
+
+export function toggleUnits(dispatch, getState) {
+  // do stuff
+  return (dispatch, getState) => {
+    let {units = 'temp_f'} = getState().otherReducer;
+    dispatch({ type: 'TOGGLE_UNITS', payload: units });
+  }
+};
 // attempt to chain Promises
 // from: https://github.com/pburtchaell/redux-promise-middleware/blob/master/docs/guides/chaining-actions.md
 // -----------------------

@@ -4,7 +4,8 @@ import { connect } from 'react-redux';
 import { geolocated, geoPropTypes } from 'react-geolocated';
 import PropTypes from 'prop-types'
 import React from 'react'
-import { axiosGetWeather, geoPositioning, foo, getPosition } from '../modules/weather'
+import { Pre } from 'rebass';
+import { axiosGetWeather, geoPositioning, foo, getPosition, toggleUnits } from '../modules/weather'
 
 import weatherIcon from '../assets/ring-alt.svg'
 
@@ -27,8 +28,19 @@ class Weather extends React.Component {
     axiosGetWeather(dispatch, lat, long)
   }
 
+  handleToggleUnits(dispatch) {
+    const { toggleUnits } = this.props;
+  }
+
+  toggleMenu (state) {
+    var newState = Object.assign({}, state)
+    newState.showMenu = !newState.showMenu
+    return newState;
+  }
+
   render() {
     const { weather } = this.props;
+    // const tempUnits = weather.data && Object.keys(weather.data).length > 0 ? 'temp_f' : ''
     return (
 
       <div style={{ margin: '0 auto' }} >
@@ -40,7 +52,7 @@ class Weather extends React.Component {
           !weather.dataFetched && !weather.isFetching ? <div></div> : 
           !weather.dataFetched && weather.isFetching ? <div><img src={weatherIcon} /></div> :
           <div>
-            <h1>{weather.data.current.temp_f} <small>f</small> | {weather.data.current.temp_c}<small>c</small></h1>
+            <h1>{weather.data.current.temp_f} <small>f</small> | {weather.data.current.temp_c} <small>c</small></h1>
             <h2>{weather.data.location.name}, {weather.data.location.region}</h2>
           </div>
         }
@@ -51,9 +63,10 @@ class Weather extends React.Component {
 
 const mapDispatchToProps = {
   axiosGetWeather,
-  geoPositioning,
   foo,
-  getPosition
+  geoPositioning,
+  getPosition,
+  toggleUnits
 }
 
 const mapStateToProps = (state) => ({
@@ -64,7 +77,8 @@ Weather.propTypes = {
   weather: PropTypes.object.isRequired,
   axiosGetWeather: PropTypes.func.isRequired,
   geoPositioning: PropTypes.func.isRequired,
-  getPosition: PropTypes.func.isRequired
+  getPosition: PropTypes.func.isRequired,
+  toggleUnits: PropTypes.func.isRequired
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Weather);

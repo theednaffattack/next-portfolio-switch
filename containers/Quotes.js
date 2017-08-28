@@ -13,11 +13,13 @@ import Quotes from '../components/Quotes'
     implementing our wrapper around increment; the component doesn't care   */
 
 const mapDispatchToProps = {
-  requestQuote
-}
+  requestQuote,
+  axiosGetQuotes,
+};
 
 const mapStateToProps = (state) => ({
   quotes: state.quotes,
+  randomIdx: state.quotes.randomIdx
 });
 
 /*  Note: mapStateToProps is where you should use `reselect` to create selectors, ie:

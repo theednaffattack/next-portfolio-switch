@@ -23,37 +23,38 @@ export const GET_POSITION_REJECTED = 'GET_POSITION_REJECTED'
 
 // const API_URL = 'http://quotesondesign.com/wp-json/posts?filter[orderby]=rand&filter[posts_per_page]=1';
 const API_URL = 'https://andruxnet-random-famous-quotes.p.mashape.com/?cat=famous&count=2';
+const API_URL2 = 'https://random-quote-generator.herokuapp.com/api/quotes';
 
 // from: https://gist.github.com/varmais/74586ec1854fe288d393
-const getPosition = function (options) {
-  return new Promise(function (resolve, reject) {
-    navigator.geolocation.getCurrentPosition(resolve, reject, options);
-  });
-}
+// const getPosition = function (options) {
+//   return new Promise(function (resolve, reject) {
+//     navigator.geolocation.getCurrentPosition(resolve, reject, options);
+//   });
+// }
 
-export function getQuote (dispatch) {
-  return (dispatch) => {
-    // call a function to get the quote
-    // dispatch within that function
-  } // end outer return
-}
+// export function getQuote (dispatch) {
+//   return (dispatch) => {
+//     // call a function to get the quote
+//     // dispatch within that function
+//   } // end outer return
+// }
 
-export function geoPositioning (dispatch) {
-  return (dispatch) => {
-    dispatch({ type: 'GET_POSITION' })
-    getPosition()
-      .then((position) => {
-        console.log('Position!!!')
-        console.log(JSON.stringify(position.coords, null, 2));
-        dispatch({ type: 'GET_POSITION_FULFILLED', payload: {position} })
-        dispatch(axiosGetQuotes())
-      })
-      .catch((error) => {
-        console.error(error.message);
-        dispatch({ type: 'GET_POSITION_REJECTED', payload: error })
-      });
-  }
-}
+// export function geoPositioning (dispatch) {
+//   return (dispatch) => {
+//     dispatch({ type: 'GET_POSITION' })
+//     getPosition()
+//       .then((position) => {
+//         console.log('Position!!!')
+//         console.log(JSON.stringify(position.coords, null, 2));
+//         dispatch({ type: 'GET_POSITION_FULFILLED', payload: {position} })
+//         dispatch(axiosGetQuotes())
+//       })
+//       .catch((error) => {
+//         console.error(error.message);
+//         dispatch({ type: 'GET_POSITION_REJECTED', payload: error })
+//       });
+//   }
+// }
 // from: https://gist.github.com/varmais/74586ec1854fe288d393
 // 
 
@@ -61,22 +62,26 @@ export const requestQuote = () => ({
   type: 'GET_QUOTE',
   payload: axios({
     method: 'get',
-    url: API_URL,
-    headers: {'X-Mashape-Key': 'RxgO9z4RlfmshBZcAA8CDQ5lBn2gp1j5lJfjsn3iwh7sgp85W1'}
+    url: API_URL2,
+    // headers: {'X-Mashape-Key': 'RxgO9z4RlfmshBZcAA8CDQ5lBn2gp1j5lJfjsn3iwh7sgp85W1'}
   })
-}) 
+})
+
+const randomQuoteIdx = function() {
+  return Math.floor(Math.random() * 5);
+};
 
 export function axiosGetQuotes () {
-  // return (dispatch) => {
-    axios.get(API_URL)
+  return (dispatch) => {
+    axios.get(API_URL2)
       .then((response) => {
         return response;
       })
       .catch((error) => {
         dispatch({ type: 'GET_QUOTE_REJECTED', payload: error })
-      })
-  }
-// }
+      });
+  };
+}
 
 export const actions = {
   axiosGetQuotes

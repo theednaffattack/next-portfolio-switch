@@ -38,7 +38,22 @@ const GoldenrodBorderedDiv = styled.div`
   box-shadow: 1px 1px 2px gray;
 `;
 
-export const Quotes = ({ requestQuote, quotes }) => (
+const randomQuoteIdx = function(arrLength) {
+  return Math.floor(Math.random() * arrLength);
+};
+
+const randomQuoteTotal = function(arr) {
+  const myLength = arr.length;
+  const foo = Math.floor(Math.random() * myLength);
+  const quoteObj = {
+    quote: arr[foo].quote,
+    author: arr[foo].author,
+    foo
+  };
+  return quoteObj;
+};
+
+export const Quotes = ({ requestQuote, axiosGetQuotes, quotes, randomIdx }) => (
   <div style={{ margin: '0 auto' }} >
     <GoldenrodBorderedDiv id="quote-box" className="text-center">
       <div className="wrapper" >
@@ -50,13 +65,21 @@ export const Quotes = ({ requestQuote, quotes }) => (
           </div>
         </div>
       </div>
-      <h3><em>{quotes.data.data ? quotes.data.data[0].quote : ''}</em></h3>
-      <h4 id="quote-content">{quotes.data.data ? quotes.data.data[0].author : ''}</h4>
+      {
+        quotes.data.data ?
+          <span>
+          <h1><em>{ quotes.data.data[randomIdx].quote }</em></h1>
+          <h2><em>{ quotes.data.data[randomIdx].author }</em></h2>
+          </span>
+        : <h1>Click the button to get started</h1>
+      }
     </GoldenrodBorderedDiv>
   </div>
 )
 Quotes.propTypes = {
   requestQuote: PropTypes.func.isRequired,
+  axiosGetQuotes: PropTypes.func.isRequired,
+  randomIdx: PropTypes.number.isRequired,
   quotes: PropTypes.shape({
     data: PropTypes.object.isRequired
   }),

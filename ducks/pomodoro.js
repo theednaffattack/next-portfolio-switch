@@ -33,7 +33,7 @@ export function startMainClock(dispatch) {
     dispatch({
         type: START_TIMER,
         payload: {
-            actionName: 'START_MAIN_CLOCK',
+            actionName: 'START_MAIN_TIMER',
             timerName: 'mainTimer',
             timerInterval: 1000,
             timerPeriod: defaultTimer

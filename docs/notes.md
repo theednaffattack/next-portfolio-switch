@@ -8,6 +8,15 @@
   4 - Adapt Redux implementation from [redux motion](https://github.com/bgryszko/react-motion-example.git)  
 
   5 - I need a way to handle next/link and next/router
+
+  6 - Add increment, decrement timer functionality to pomodoro
+
+  7 - Add "load timer" to pomodoro
+
+  8 - Improve pause timer functionality to pomodoro
+
+  9 - Add reset timer functionality to pomodoro
+
       The code below won't work
 
       **old code from the next example, replace this code in /components/Header.js

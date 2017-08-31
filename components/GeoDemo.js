@@ -1,6 +1,6 @@
 import { geolocated } from 'react-geolocated';
 import React from 'react';
-import { axiosGetWeather, geoPositioning, foo, getPosition, toggleUnits } from '../routeModules/Weather/modules/weather'
+// import { axiosGetWeather, geoPositioning, foo, getPosition, toggleUnits } from '../routeModules/Weather/modules/weather'
 import Weather from '../full_modules/Weather/components/Weather'
 import { Pre } from 'rebass'
 

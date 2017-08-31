@@ -1,3 +1,4 @@
+import react from 'react';
 import { connect } from 'react-redux';
 import Pomodoro from '../components/Pomodoro';
 import {

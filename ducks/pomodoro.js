@@ -21,13 +21,15 @@ export const decSessionClock = function(arg) {};
 export const incBreakClock = function(arg) {};
 export const decBreakClock = function(arg) {};
 
-export function startMainClock(dispatch) {
+export function startMainClock(dispatch, mainClockVal) {
   // const d = new Date();
   // var distance = 60000;
   // var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
   // var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
   // var seconds = Math.floor((distance % (1000 * 60)) / 1000);
-  const defaultTimer = 1 * 60 // 1 minute(s)
+  // const defaultTimer = 1 * 60 // 1 minute(s)
+  console.log(dispatch);
+  console.log(mainClockVal);
   
   return (dispatch) => {
     dispatch({
@@ -36,7 +38,7 @@ export function startMainClock(dispatch) {
             actionName: 'START_MAIN_TIMER',
             timerName: 'mainTimer',
             timerInterval: 1000,
-            timerPeriod: defaultTimer
+            timerPeriod: mainClockVal
         }
     });
   };

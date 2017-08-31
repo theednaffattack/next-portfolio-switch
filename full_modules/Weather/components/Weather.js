@@ -22,9 +22,9 @@ class Weather extends React.Component {
 
   handleClick(dispatch) {
     // const { makeChoice } = this.props;
-    const { weather, axiosGetWeather, geoPositioning } = this.props;
-    const lat = this.props.lat
-    const long = this.props.long
+    const { lat, long, axiosGetWeather } = this.props;
+    // const lat = this.props.lat
+    // const long = this.props.long
     axiosGetWeather(dispatch, lat, long)
   }
 

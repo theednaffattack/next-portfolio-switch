@@ -52,37 +52,97 @@ const GoldenrodBorderedDiv = styled.div`
   box-shadow: 1px 1px 2px gray;
 `;
 
-export const Pomodoro = ({
-  pomodoro, 
-  incSessionClock,
-  decSessionClock,
-  incBreakClock,
-  decBreakClock,
-  pauseMainClock,
-  startMainClock,
-}) => (
-  <div style={{ margin: '0 auto' }} >
-    <GoldenrodBorderedDiv id="quote-box" className="text-center">
-      <div className="wrapper" >
-        <div className="loading-wrapper">
-          <div className="loader">
-            <Button onClick={startMainClock}>
-              <i className="fa fa-angle-down"></i> Start Timer
-            </Button>
-            <Button onClick={pauseMainClock}>
-              <i className="fa fa-angle-down"></i> Stop Timer
-            </Button>
+export class Pomodoro extends React.Component {
+  componentDidMount() {
+    const {
+      pomodoro, 
+      incSessionClock,
+      decSessionClock,
+      incBreakClock,
+      decBreakClock,
+      pauseMainClock,
+      startMainClock,
+    } = this.props;
+    return;
+  } 
+
+  handleStartMainTimer(dispatch) {
+    // e.preventDefault()
+    
+    // if (e.nativeEvent.keyCode === 13) {
+    //   console.log('This is enter!')
+    // }
+    const { startMainClock, pomodoro } = this.props;
+    startMainClock(dispatch, pomodoro.clock);
+  }
+
+  render() {
+    const {
+      pomodoro, 
+      incSessionClock,
+      decSessionClock,
+      incBreakClock,
+      decBreakClock,
+      pauseMainClock,
+      startMainClock,
+    } = this.props;
+    return(
+      <div style={{ margin: '0 auto' }}>
+        <GoldenrodBorderedDiv id="quote-box" className="text-center">
+          <div className="wrapper" >
+            <div className="loading-wrapper">
+              <div className="loader">
+                <Button onClick={()=>this.handleStartMainTimer()}>
+                  <i className="fa fa-angle-down"></i> Start Timer
+                </Button>
+                <Button onClick={pauseMainClock}>
+                  <i className="fa fa-angle-down"></i> Stop Timer
+                </Button>
+              </div>
+            </div>
           </div>
-        </div>
+          <h3><em>{
+            !pomodoro ? ''
+            : Math.floor(pomodoro.clock/60) % 60 < 1 ? pomodoro.clock
+            : Math.floor(pomodoro.clock/60) % 60 + ' : ' + pomodoro.clock
+          }</em></h3>
+        </GoldenrodBorderedDiv>
       </div>
-      <h3><em>{
-        !pomodoro ? ''
-        : Math.floor(pomodoro.clock/60) % 60 < 1 ? pomodoro.clock
-        : Math.floor(pomodoro.clock/60) % 60 + ' : ' + pomodoro.clock
-      }</em></h3>
-    </GoldenrodBorderedDiv>
-  </div>
-)
+    )
+  }
+};
+
+// export const Pomodoro = ({
+//   pomodoro, 
+//   incSessionClock,
+//   decSessionClock,
+//   incBreakClock,
+//   decBreakClock,
+//   pauseMainClock,
+//   startMainClock,
+// }) => (
+//   <div style={{ margin: '0 auto' }} >
+//     <GoldenrodBorderedDiv id="quote-box" className="text-center">
+//       <div className="wrapper" >
+//         <div className="loading-wrapper">
+//           <div className="loader">
+//             <Button onClick={startMainClock}>
+//               <i className="fa fa-angle-down"></i> Start Timer
+//             </Button>
+//             <Button onClick={pauseMainClock}>
+//               <i className="fa fa-angle-down"></i> Stop Timer
+//             </Button>
+//           </div>
+//         </div>
+//       </div>
+//       <h3><em>{
+//         !pomodoro ? ''
+//         : Math.floor(pomodoro.clock/60) % 60 < 1 ? pomodoro.clock
+//         : Math.floor(pomodoro.clock/60) % 60 + ' : ' + pomodoro.clock
+//       }</em></h3>
+//     </GoldenrodBorderedDiv>
+//   </div>
+// )
 Pomodoro.propTypes = {
   incSessionClock: PropTypes.func.isRequired,
   decSessionClock: PropTypes.func.isRequired,

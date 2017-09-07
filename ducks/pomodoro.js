@@ -1,11 +1,10 @@
-import {START_TIMER} from 'redux-timer-middleware';
-import {STOP_TIMER} from 'redux-timer-middleware';
-// CAN'T CURRENTLY SHORTCUT THIS, BE CAREFUL OF NAMES
+import { START_TIMER, STOP_TIMER } from 'redux-timer-middleware';
+
 // ------------------------------------
 // Constants
 // ------------------------------------
-// export const GET_QUOTE = 'GET_QUOTE';
-
+export const RESET_TIMER = 'RESET_TIMER';
+export const LOAD_MAIN_TIMER = 'LOAD_MAIN_TIMER';
 // ------------------------------------
 // Actions
 // ------------------------------------
@@ -21,6 +20,31 @@ export const decSessionClock = function(arg) {};
 export const incBreakClock = function(arg) {};
 export const decBreakClock = function(arg) {};
 
+export const resetMainClock = function() {
+  return (dispatch) => {
+    dispatch({
+      type: RESET_TIMER,
+      payload: 60,
+    });
+  };
+};
+
+export function loadBreakClock(dispatch, clockVal) {
+  console.log('func loadBreakClock: clockVal = ' + clockVal);
+  return (dispatch) => {
+    dispatch({ type: LOAD_MAIN_TIMER, payload: clockVal });
+  };
+};
+
+
+
+export function loadSessionClock(dispatch, clockVal) {
+  console.log('func loadBreakClock: clockVal = ' + clockVal);
+  return (dispatch) => {
+    dispatch({ type: LOAD_MAIN_TIMER, payload: clockVal });
+  };
+};
+
 export function startMainClock(dispatch, mainClockVal) {
   // const d = new Date();
   // var distance = 60000;
@@ -28,9 +52,28 @@ export function startMainClock(dispatch, mainClockVal) {
   // var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
   // var seconds = Math.floor((distance % (1000 * 60)) / 1000);
   // const defaultTimer = 1 * 60 // 1 minute(s)
-  console.log(dispatch);
   console.log(mainClockVal);
-  
+
+  if (mainClockVal <= 0) {
+    console.log('from within if statement: ');
+    return (dispatch) => {
+      dispatch({
+        type: RESET_TIMER,
+        payload: 60,
+      });
+      dispatch({
+          type: START_TIMER,
+          payload: {
+              actionName: 'START_MAIN_TIMER',
+              timerName: 'mainTimer',
+              timerInterval: 1000,
+              timerPeriod: mainClockVal,
+          }
+      });
+    };
+  }
+  console.log('from after if statement: ');
+
   return (dispatch) => {
     dispatch({
         type: START_TIMER,
@@ -38,7 +81,7 @@ export function startMainClock(dispatch, mainClockVal) {
             actionName: 'START_MAIN_TIMER',
             timerName: 'mainTimer',
             timerInterval: 1000,
-            timerPeriod: mainClockVal
+            timerPeriod: mainClockVal,
         }
     });
   };
@@ -49,7 +92,7 @@ export const pauseMainClock = function(dispatch) {
     dispatch({
       type: STOP_TIMER,
       payload: {
-        timerName: 'mainTimer'
+        timerName: 'mainTimer',
       }
     });
   };

@@ -8,6 +8,8 @@ import {
   decBreakClock,
   pauseMainClock,
   startMainClock,
+  loadBreakClock,
+  loadSessionClock,
 } from '../ducks/pomodoro';
 
 /*  This is a container component. Notice it does not contain any JSX,
@@ -27,6 +29,8 @@ const mapDispatchToProps = {
   decBreakClock,
   pauseMainClock,
   startMainClock,
+  loadBreakClock,
+  loadSessionClock,
 };
 
 const mapStateToProps = (state) => ({

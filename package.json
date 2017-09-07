@@ -9,7 +9,7 @@
   "scripts": {
     "dev": "next -p 3030",
     "build": "next build",
-    "start": "next start",
+    "start": "next build && next start",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook"
   },

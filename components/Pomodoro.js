@@ -61,19 +61,26 @@ export class Pomodoro extends React.Component {
       incBreakClock,
       decBreakClock,
       pauseMainClock,
+      loadBreakClock,
+      loadSessionClock,
       startMainClock,
     } = this.props;
     return;
   } 
 
   handleStartMainTimer(dispatch) {
-    // e.preventDefault()
-    
-    // if (e.nativeEvent.keyCode === 13) {
-    //   console.log('This is enter!')
-    // }
     const { startMainClock, pomodoro } = this.props;
     startMainClock(dispatch, pomodoro.clock);
+  }
+
+  handleloadBreakClock(dispatch) {
+    const { loadBreakClock, pomodoro } = this.props;
+    loadBreakClock(dispatch, pomodoro.breakClock);
+  }
+
+  handleloadSessionClock(dispatch) {
+    const { loadSessionClock, pomodoro } = this.props;
+    loadSessionClock(dispatch, pomodoro.sessionClock);
   }
 
   render() {
@@ -84,6 +91,8 @@ export class Pomodoro extends React.Component {
       incBreakClock,
       decBreakClock,
       pauseMainClock,
+      loadBreakClock,
+      loadSessionClock,
       startMainClock,
     } = this.props;
     return(
@@ -92,7 +101,7 @@ export class Pomodoro extends React.Component {
           <div className="wrapper" >
             <div className="loading-wrapper">
               <div className="loader">
-                <Button onClick={()=>this.handleStartMainTimer()}>
+                <Button onClick={() => this.handleStartMainTimer()}>
                   <i className="fa fa-angle-down"></i> Start Timer
                 </Button>
                 <Button onClick={pauseMainClock}>
@@ -101,58 +110,45 @@ export class Pomodoro extends React.Component {
               </div>
             </div>
           </div>
-          <h3><em>{
+          <h3>break: {
             !pomodoro ? ''
-            : Math.floor(pomodoro.clock/60) % 60 < 1 ? pomodoro.clock
-            : Math.floor(pomodoro.clock/60) % 60 + ' : ' + pomodoro.clock
-          }</em></h3>
+            : Math.floor(pomodoro.breakClock/60) % 60 < 1 ? (pomodoro.breakClock % 60).toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false})
+            : Math.floor(pomodoro.breakClock/60) % 60 + ' : ' + (pomodoro.breakClock % 60).toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false})
+          }</h3>
+          <Button onClick={() => this.handleloadBreakClock()}>Load break</Button>
+          <Button>+</Button><Button>-</Button>
+          <h3>session: {
+            !pomodoro ? ''
+            : Math.floor(pomodoro.sessionClock/60) % 60 < 1 ? (pomodoro.sessionClock % 60).toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false})
+            : Math.floor(pomodoro.sessionClock/60) % 60 + ' : ' + (pomodoro.sessionClock % 60).toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false})
+          }</h3>
+          <Button onClick={() => this.handleloadSessionClock()}>Load session</Button>
+          <Button>+</Button><Button>-</Button>
+          <h2>Main<br />
+          <em>{
+            !pomodoro ? ''
+            : Math.floor(pomodoro.clock/60) % 60 < 1 ? (pomodoro.clock % 60).toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false})
+            : Math.floor(pomodoro.clock/60) % 60 + ' : ' + (pomodoro.clock % 60).toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false})
+          }</em></h2>
         </GoldenrodBorderedDiv>
       </div>
     )
   }
 };
 
-// export const Pomodoro = ({
-//   pomodoro, 
-//   incSessionClock,
-//   decSessionClock,
-//   incBreakClock,
-//   decBreakClock,
-//   pauseMainClock,
-//   startMainClock,
-// }) => (
-//   <div style={{ margin: '0 auto' }} >
-//     <GoldenrodBorderedDiv id="quote-box" className="text-center">
-//       <div className="wrapper" >
-//         <div className="loading-wrapper">
-//           <div className="loader">
-//             <Button onClick={startMainClock}>
-//               <i className="fa fa-angle-down"></i> Start Timer
-//             </Button>
-//             <Button onClick={pauseMainClock}>
-//               <i className="fa fa-angle-down"></i> Stop Timer
-//             </Button>
-//           </div>
-//         </div>
-//       </div>
-//       <h3><em>{
-//         !pomodoro ? ''
-//         : Math.floor(pomodoro.clock/60) % 60 < 1 ? pomodoro.clock
-//         : Math.floor(pomodoro.clock/60) % 60 + ' : ' + pomodoro.clock
-//       }</em></h3>
-//     </GoldenrodBorderedDiv>
-//   </div>
-// )
 Pomodoro.propTypes = {
   incSessionClock: PropTypes.func.isRequired,
   decSessionClock: PropTypes.func.isRequired,
   incBreakClock: PropTypes.func.isRequired,
   decBreakClock: PropTypes.func.isRequired,
   pauseMainClock: PropTypes.func.isRequired,
+  loadBreakClock: PropTypes.func.isRequired,
+  loadSessionClock: PropTypes.func.isRequired,
   startMainClock: PropTypes.func.isRequired,
   pomodoro: PropTypes.shape({
     sessionClock: PropTypes.number.isRequired,
-    clock: PropTypes.number.isRequired
+    breakClock: PropTypes.number.isRequired,
+    clock: PropTypes.number.isRequired,
   }),
 }
 

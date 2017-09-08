@@ -27,6 +27,7 @@
     "react-dom": "^15.6.1",
     "react-geolocated": "^2.0.0",
     "react-redux": "^5.0.5",
+    "react-sound": "^0.8.0",
     "react-styled-flexboxgrid": "^2.0.3",
     "react-svg-inline": "^2.0.0",
     "react-svg-loader": "^1.1.1",

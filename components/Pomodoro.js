@@ -1,4 +1,5 @@
 import React from 'react';
+import Sound from 'react-sound';
 import PropTypes from 'prop-types';
 import Link from 'next/link';
 import {
@@ -66,21 +67,31 @@ export class Pomodoro extends React.Component {
       startMainClock,
     } = this.props;
     return;
-  } 
+  }
+
+  handleDecSessionClock(dispatch) {
+    const { decSessionClock } = this.props;
+    decSessionClock(dispatch, 1 * 60);
+  }
+
+  handleIncSessionClock(dispatch) {
+    const { incSessionClock } = this.props;
+    incSessionClock(dispatch, 1 * 60);
+  }
 
   handleStartMainTimer(dispatch) {
     const { startMainClock, pomodoro } = this.props;
-    startMainClock(dispatch, pomodoro.clock);
+    startMainClock(dispatch, pomodoro.clock, pomodoro.sessionClock);
   }
 
-  handleloadBreakClock(dispatch) {
+  handleLoadBreakClock(dispatch) {
     const { loadBreakClock, pomodoro } = this.props;
-    loadBreakClock(dispatch, pomodoro.breakClock);
+    loadBreakClock(dispatch, pomodoro.clock, pomodoro.breakClock);
   }
 
-  handleloadSessionClock(dispatch) {
+  handleLoadSessionClock(dispatch) {
     const { loadSessionClock, pomodoro } = this.props;
-    loadSessionClock(dispatch, pomodoro.sessionClock);
+    loadSessionClock(dispatch, pomodoro.clock, pomodoro.sessionClock);
   }
 
   render() {
@@ -98,6 +109,21 @@ export class Pomodoro extends React.Component {
     return(
       <div style={{ margin: '0 auto' }}>
         <GoldenrodBorderedDiv id="quote-box" className="text-center">
+          <h3>break: {
+            !pomodoro ? ''
+            : Math.floor(pomodoro.breakClock/60) % 60 < 1 ? (pomodoro.breakClock % 60).toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false})
+            : Math.floor(pomodoro.breakClock/60) % 60 + ' : ' + (pomodoro.breakClock % 60).toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false})
+          }</h3>
+          { pomodoro.breakClock % 60 > 0 ? '' : 'whoo boy ' + pomodoro.breakClock % 60 }
+          <Button onClick={() => this.handleLoadBreakClock()}>Load break</Button>
+          <Button>+</Button><Button>-</Button>
+          <h3>session: {
+            !pomodoro ? ''
+            : Math.floor(pomodoro.sessionClock/60) % 60 < 1 ? (pomodoro.sessionClock % 60).toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false})
+            : Math.floor(pomodoro.sessionClock/60) % 60 + ' : ' + (pomodoro.sessionClock % 60).toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false})
+          }</h3>
+          <Button onClick={() => this.handleLoadSessionClock()}>Load session</Button>
+          <Button onClick={() => this.handleIncSessionClock(60)} bg='tomato'>+</Button><Button onClick={() => this.handleDecSessionClock(60)} bg='green'>-</Button>
           <div className="wrapper" >
             <div className="loading-wrapper">
               <div className="loader">
@@ -110,20 +136,6 @@ export class Pomodoro extends React.Component {
               </div>
             </div>
           </div>
-          <h3>break: {
-            !pomodoro ? ''
-            : Math.floor(pomodoro.breakClock/60) % 60 < 1 ? (pomodoro.breakClock % 60).toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false})
-            : Math.floor(pomodoro.breakClock/60) % 60 + ' : ' + (pomodoro.breakClock % 60).toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false})
-          }</h3>
-          <Button onClick={() => this.handleloadBreakClock()}>Load break</Button>
-          <Button>+</Button><Button>-</Button>
-          <h3>session: {
-            !pomodoro ? ''
-            : Math.floor(pomodoro.sessionClock/60) % 60 < 1 ? (pomodoro.sessionClock % 60).toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false})
-            : Math.floor(pomodoro.sessionClock/60) % 60 + ' : ' + (pomodoro.sessionClock % 60).toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false})
-          }</h3>
-          <Button onClick={() => this.handleloadSessionClock()}>Load session</Button>
-          <Button>+</Button><Button>-</Button>
           <h2>Main<br />
           <em>{
             !pomodoro ? ''

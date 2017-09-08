@@ -29,7 +29,8 @@ const Thumbnail = styled.img`
   height: auto;
 `;
 
-const BlinkerCircle = styled(Circle)`
+const BlinkerCircle = styled(Card)`
+  width: 200px;
   animation: blinker 1s linear infinite;
 
   @keyframes blinker {  
@@ -105,17 +106,17 @@ export class Pomodoro extends React.Component {
 
   handleStartMainTimer(dispatch) {
     const { startMainClock, pomodoro } = this.props;
-    startMainClock(dispatch, pomodoro.clock, pomodoro.sessionClock);
+    startMainClock(dispatch, pomodoro.mainClock, pomodoro.sessionClock);
   }
 
   handleLoadBreakClock(dispatch) {
     const { loadBreakClock, pomodoro } = this.props;
-    loadBreakClock(dispatch, pomodoro.clock, pomodoro.breakClock);
+    loadBreakClock(dispatch, pomodoro.mainClock, pomodoro.breakClock);
   }
 
   handleLoadSessionClock(dispatch) {
     const { loadSessionClock, pomodoro } = this.props;
-    loadSessionClock(dispatch, pomodoro.clock, pomodoro.sessionClock);
+    loadSessionClock(dispatch, pomodoro.mainClock, pomodoro.sessionClock);
   }
 
   render() {
@@ -139,14 +140,14 @@ export class Pomodoro extends React.Component {
             : Math.floor(pomodoro.breakClock/60) % 60 + ' : ' + (pomodoro.breakClock % 60).toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false})
           }</h3>
           <Button onClick={() => this.handleLoadBreakClock()}>Load break</Button>
-          <Button onClick={() => this.handleIncBreakClock(60)} bg='tomato'>+</Button><Button onClick={() => this.handleDecBreakClock(60)}>-</Button>
+          <Button onClick={() => this.handleIncBreakClock(60)} bg='red5'>+</Button><Button onClick={() => this.handleDecBreakClock(60)} bg='green7'>-</Button>
           <h3>session: {
             !pomodoro ? ''
             : Math.floor(pomodoro.sessionClock/60) % 60 < 1 ? (pomodoro.sessionClock % 60).toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false})
             : Math.floor(pomodoro.sessionClock/60) % 60 + ' : ' + (pomodoro.sessionClock % 60).toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false})
           }</h3>
           <Button onClick={() => this.handleLoadSessionClock()}>Load session</Button>
-          <Button onClick={() => this.handleIncSessionClock(60)} bg='tomato'>+</Button><Button onClick={() => this.handleDecSessionClock(60)} bg='green'>-</Button>
+          <Button onClick={() => this.handleIncSessionClock(60)} bg='red5'>+</Button><Button onClick={() => this.handleDecSessionClock(60)} bg='green7'>-</Button>
           <div className="wrapper" >
             <div className="loading-wrapper">
               <div className="loader">
@@ -162,11 +163,11 @@ export class Pomodoro extends React.Component {
           <h2>Main</h2>
           <CircleCard width={100}>{
             !pomodoro ? ''
-            : Math.floor(pomodoro.clock/60) % 60 < 1 ? (pomodoro.clock % 60).toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false})
-            : Math.floor(pomodoro.clock/60) % 60 + ' : ' + (pomodoro.clock % 60).toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false})
+            : Math.floor(pomodoro.mainClock/60) % 60 < 1 ? (pomodoro.mainClock % 60).toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false})
+            : Math.floor(pomodoro.mainClock/60) % 60 + ' : ' + (pomodoro.mainClock % 60).toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false})
           }</CircleCard>
         </GoldenrodBorderedDiv>
-        {pomodoro.clock <= 0 ? <BlinkerCircle bg='blue'>Something</BlinkerCircle> : ''}
+        {pomodoro.mainClock <= 0 ? <BlinkerCircle bg='blue'>Something</BlinkerCircle> : ''}
       </div>
     )
   }
@@ -184,7 +185,7 @@ Pomodoro.propTypes = {
   pomodoro: PropTypes.shape({
     sessionClock: PropTypes.number.isRequired,
     breakClock: PropTypes.number.isRequired,
-    clock: PropTypes.number.isRequired,
+    mainClock: PropTypes.number.isRequired,
   }),
 }
 

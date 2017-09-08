@@ -8,6 +8,7 @@ import {
   Box,
   Button,
   Card,
+  Circle,
   Container,
   Flex,
   Heading,
@@ -26,6 +27,19 @@ const Thumbnail = styled.img`
   max-width: 100%;
   min-width: 20px;
   height: auto;
+`;
+
+const BlinkerCircle = styled(Circle)`
+  animation: blinker 1s linear infinite;
+
+  @keyframes blinker {  
+    50% { opacity: 0; }
+  }
+`;
+
+const CircleCard = styled(Card)`
+  // border-radius: 50%;
+  // border: 3px solid blue;
 `;
 
 const MaxWidthContainer = styled(Container)`
@@ -67,6 +81,16 @@ export class Pomodoro extends React.Component {
       startMainClock,
     } = this.props;
     return;
+  }
+
+  handleDecBreakClock(dispatch) {
+    const { decBreakClock } = this.props;
+    decBreakClock(dispatch, 1 * 60);
+  }
+
+  handleIncBreakClock(dispatch) {
+    const { incBreakClock } = this.props;
+    incBreakClock(dispatch, 1 * 60);
   }
 
   handleDecSessionClock(dispatch) {
@@ -114,9 +138,8 @@ export class Pomodoro extends React.Component {
             : Math.floor(pomodoro.breakClock/60) % 60 < 1 ? (pomodoro.breakClock % 60).toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false})
             : Math.floor(pomodoro.breakClock/60) % 60 + ' : ' + (pomodoro.breakClock % 60).toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false})
           }</h3>
-          { pomodoro.breakClock % 60 > 0 ? '' : 'whoo boy ' + pomodoro.breakClock % 60 }
           <Button onClick={() => this.handleLoadBreakClock()}>Load break</Button>
-          <Button>+</Button><Button>-</Button>
+          <Button onClick={() => this.handleIncBreakClock(60)} bg='tomato'>+</Button><Button onClick={() => this.handleDecBreakClock(60)}>-</Button>
           <h3>session: {
             !pomodoro ? ''
             : Math.floor(pomodoro.sessionClock/60) % 60 < 1 ? (pomodoro.sessionClock % 60).toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false})
@@ -136,13 +159,14 @@ export class Pomodoro extends React.Component {
               </div>
             </div>
           </div>
-          <h2>Main<br />
-          <em>{
+          <h2>Main</h2>
+          <CircleCard width={100}>{
             !pomodoro ? ''
             : Math.floor(pomodoro.clock/60) % 60 < 1 ? (pomodoro.clock % 60).toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false})
             : Math.floor(pomodoro.clock/60) % 60 + ' : ' + (pomodoro.clock % 60).toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false})
-          }</em></h2>
+          }</CircleCard>
         </GoldenrodBorderedDiv>
+        {pomodoro.clock <= 0 ? <BlinkerCircle bg='blue'>Something</BlinkerCircle> : ''}
       </div>
     )
   }

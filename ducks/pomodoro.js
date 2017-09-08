@@ -4,9 +4,11 @@ import { START_TIMER, STOP_TIMER } from 'redux-timer-middleware';
 // Constants
 // ------------------------------------
 export const RESET_TIMER = 'RESET_TIMER';
-export const LOAD_MAIN_TIMER = 'LOAD_MAIN_TIMER';
 export const DEC_SESSION_CLOCK = 'DEC_SESSION_CLOCK';
 export const INC_SESSION_CLOCK = 'INC_SESSION_CLOCK';
+export const INC_BREAK_CLOCK = 'INC_BREAK_CLOCK';
+export const DEC_BREAK_CLOCK = 'DEC_BREAK_CLOCK';
+export const LOAD_MAIN_TIMER = 'LOAD_MAIN_TIMER';
 export const START_MAIN_TIMER_END = 'START_MAIN_TIMER_END';
 // ------------------------------------
 // Actions
@@ -30,8 +32,21 @@ export const decSessionClock = function(dispatch) {
     dispatch({ type: DEC_SESSION_CLOCK, payload: derPayload });
   };
 };
-export const incBreakClock = function(arg) {};
-export const decBreakClock = function(arg) {};
+export const incBreakClock = function(dispatch) {
+  console.log(dispatch);
+  const derPayload = dispatch;
+  return (dispatch) => {
+    dispatch({ type: INC_BREAK_CLOCK, payload: derPayload });
+  };
+};
+
+export const decBreakClock = function(dispatch) {
+  console.log(dispatch);
+  const derPayload = dispatch;
+  return (dispatch) => {
+    dispatch({ type: DEC_BREAK_CLOCK, payload: derPayload });
+  };
+};
 
 export const resetMainClock = function() {
   return (dispatch) => {

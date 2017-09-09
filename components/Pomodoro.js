@@ -1,10 +1,11 @@
 import React from 'react';
 
 import { render, findDOMNode } from 'react-dom';
-import ReactTransitionGroup from 'react-addons-transition-group';
-import ReactTransitionGroupPlus from '../lib/ReactTransitionGroupPlus.js';
+// import ReactTransitionGroup from 'react-addons-transition-group';
+import ReactTransitionGroupPlus from '../lib/animates/ReactTransitionGroupPlus';
 import animate from 'gsap-promise';
 import RadioGroup from 'react-radio-group';
+import Animates from '../lib/animates/animates';
 
 import Sound from 'react-sound';
 import PropTypes from 'prop-types';
@@ -28,7 +29,161 @@ import {
 // import { getQuotes } from '../ducks/quotes';
 import PanelList from './PanelList';
 import { Col, Row } from 'react-styled-flexboxgrid';
-import styled from 'styled-components';
+import styled, { injectGlobal } from 'styled-components';
+
+
+injectGlobal`
+
+  .animates {
+    // position: absolute;
+    // top: 0;
+    // right: 0;
+    // bottom: 0;
+    // left: 0;
+    margin: auto;
+    width: 50px;
+    height: 50px;
+    color: #000;
+  }
+
+  .blue {
+    background-color: #00f;
+  }
+
+  .red {
+    background-color: #f00;
+  }
+
+  .green {
+    background-color: #008000;
+  }
+
+  .orange {
+    background-color: #ffa500;
+  }
+
+  .purple {
+    background-color: #800080;
+  }
+
+  .blue {
+    background-color: #3498db;
+  }
+
+  .red {
+    background-color: #b9121b;
+  }
+
+  .green {
+    background-color: #bedb39;
+  }
+
+  .orange {
+    background-color: #ffa500;
+  }
+
+  .purple {
+    background-color: #9768d1;
+  }
+
+  .makeTransparent {
+    background-color: transparent;
+  }
+
+  .demo {
+    display: flex;
+    height: 100%;
+  }
+
+  .control-panel {
+    padding: 1em 2.1em;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .control-panel > *:not(:first-child) {
+    margin-top: 1em;
+  }
+
+  .control-panel h1 {
+    font-size: 26px;
+    line-height: 0.94;
+  }
+
+  .control-panel h1 a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .control-panel h1 a:hover {
+    color: #dce0f0;
+  }
+
+  .control-panel h1 small {
+    font-size: 17px;
+    color: #adcef0;
+    font-style: italic;
+  }
+
+  .control-panel legend {
+    font-weight: bold;
+  }
+
+  .control-panel label {
+    display: block;
+  }
+
+  .control-panel input[type="range"] {
+    display: block;
+  }
+
+  .control-panel .radiogroup label {
+    display: flex;
+    margin-left: -1em;
+    margin-right: -1em;
+    padding: 0.3em 2em 0.3em 1em;
+    align-items: center;
+    cursor: pointer;
+  }
+
+  .control-panel .radiogroup label:hover {
+    background-color: #414363;
+  }
+
+  .control-panel .radiogroup span {
+    margin-left: 0.3em;
+  }
+
+  .control-panel .github-btn {
+    border: 0;
+  }
+
+  .output-panel {
+    background-color: #f5f5fd;
+    flex-grow: 1;
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+  }
+
+  .cta-button {
+    padding: 1em;
+    cursor: pointer;
+  }
+
+  .badges {
+    position: absolute;
+    bottom: 2em;
+  }
+
+  .badges > * {
+    display: block;
+  }
+
+  .badges > *:not(:first-child) {
+    margin-top: 1em;
+  }
+`;
 
 const Thumbnail = styled.img`
   max-width: 100%;
@@ -73,6 +228,7 @@ const GoldenrodBorderAvatar = styled(Avatar)`
 const GoldenrodBorderedDiv = styled.div`
   border: 3px solid goldenrod;
   box-shadow: 1px 1px 2px gray;
+  min-height: 600px;
 `;
 
 export class Pomodoro extends React.Component {
@@ -138,6 +294,7 @@ export class Pomodoro extends React.Component {
       loadSessionClock,
       startMainClock,
     } = this.props;
+    const { mainClock, sessionClock, breakClock } = pomodoro;
     return(
       <MaxWidthContainer>
           <GoldenrodBorderedDiv id="quote-box" className="text-center">
@@ -168,13 +325,45 @@ export class Pomodoro extends React.Component {
               </div>
             </div>
             <h2>Main</h2>
-            <CircleCard width={100}>{
-              !pomodoro ? ''
-              : Math.floor(pomodoro.mainClock/60) % 60 < 1 ? (pomodoro.mainClock % 60).toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false})
-              : Math.floor(pomodoro.mainClock/60) % 60 + ' : ' + (pomodoro.mainClock % 60).toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false})
-            }</CircleCard>
+            <CircleCard width={100}>
+              {
+                !pomodoro ? ''
+                : Math.floor(pomodoro.mainClock/60) % 60 < 1 ? (pomodoro.mainClock % 60).toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false})
+                : Math.floor(pomodoro.mainClock/60) % 60 + ' : ' + (pomodoro.mainClock % 60).toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false})
+              }
+            </CircleCard>
+            <ReactTransitionGroupPlus>
+              <Animates
+                key={mainClock}
+                className='makeTransparent'
+                enterDuration='0.8'
+                leaveDuration='0.3'
+              >
+
+                {
+                  !pomodoro ? ''
+                  : pomodoro.mainClock <= 0
+                  ? <BlinkerCircle bg='blue'>
+                      Something
+                      <Sound
+                        url='../static/sounds/win.mp3'
+                        playStatus={Sound.status.PLAYING}
+                        playFromPosition={300}
+                        volume={70}
+                        loop={true}
+                        onLoading={({bytesLoaded, bytesTotal}) => console.log(`${bytesLoaded / bytesTotal * 100}% loaded`)}
+                        onPlaying={({position}) => console.log(position)}
+                        onPause={() => console.log('Paused')}
+                        onResume={() => console.log('Resumed')}
+                        onStop={() => console.log('Stopped')}
+                        onFinishedPlaying={() => this.setState({playStatus: Sound.status.STOPPED})} />
+                      </BlinkerCircle>
+                  : Math.floor(pomodoro.mainClock/60) % 60 < 1 ? (pomodoro.mainClock % 60).toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false})
+                  : Math.floor(pomodoro.mainClock/60) % 60 + ' : ' + (pomodoro.mainClock % 60).toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false})
+                }
+              </Animates>
+            </ReactTransitionGroupPlus>
           </GoldenrodBorderedDiv>
-          {pomodoro.mainClock <= 0 ? <BlinkerCircle bg='blue'>Something</BlinkerCircle> : ''}
       </MaxWidthContainer>
     )
   }

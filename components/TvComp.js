@@ -84,7 +84,7 @@ export class TvComp extends React.Component {
                 {testForChannelValue(queryKey, 'name')}
           </Panel>
         )
-      })
+      }) // end const queryList
     
     const resultList =  !twitch ? '' :
                         !twitch.resultStreams ? '' :
@@ -102,7 +102,7 @@ export class TvComp extends React.Component {
             <BorderdCol xs={3}>eddie</BorderdCol>
           </GrayBorderRow>
         )
-      })
+      }) // end const resultList
 
     return (
       <MaxWidthContainer>
@@ -111,8 +111,8 @@ export class TvComp extends React.Component {
           {queryList}
         </Col>
       </MaxWidthContainer>
-    )
-  }
+    ) // end return of class TvComp render method
+  } // end of class TvComp
 
   componentDidMount() {
       const { getTwitch } = this.props;

@@ -1,4 +1,11 @@
 import React from 'react';
+
+import { render, findDOMNode } from 'react-dom';
+import ReactTransitionGroup from 'react-addons-transition-group';
+import ReactTransitionGroupPlus from '../lib/ReactTransitionGroupPlus.js';
+import animate from 'gsap-promise';
+import RadioGroup from 'react-radio-group';
+
 import Sound from 'react-sound';
 import PropTypes from 'prop-types';
 import Link from 'next/link';
@@ -132,43 +139,43 @@ export class Pomodoro extends React.Component {
       startMainClock,
     } = this.props;
     return(
-      <div style={{ margin: '0 auto' }}>
-        <GoldenrodBorderedDiv id="quote-box" className="text-center">
-          <h3>break: {
-            !pomodoro ? ''
-            : Math.floor(pomodoro.breakClock/60) % 60 < 1 ? (pomodoro.breakClock % 60).toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false})
-            : Math.floor(pomodoro.breakClock/60) % 60 + ' : ' + (pomodoro.breakClock % 60).toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false})
-          }</h3>
-          <Button onClick={() => this.handleLoadBreakClock()}>Load break</Button>
-          <Button onClick={() => this.handleIncBreakClock(60)} bg='red5'>+</Button><Button onClick={() => this.handleDecBreakClock(60)} bg='green7'>-</Button>
-          <h3>session: {
-            !pomodoro ? ''
-            : Math.floor(pomodoro.sessionClock/60) % 60 < 1 ? (pomodoro.sessionClock % 60).toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false})
-            : Math.floor(pomodoro.sessionClock/60) % 60 + ' : ' + (pomodoro.sessionClock % 60).toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false})
-          }</h3>
-          <Button onClick={() => this.handleLoadSessionClock()}>Load session</Button>
-          <Button onClick={() => this.handleIncSessionClock(60)} bg='red5'>+</Button><Button onClick={() => this.handleDecSessionClock(60)} bg='green7'>-</Button>
-          <div className="wrapper" >
-            <div className="loading-wrapper">
-              <div className="loader">
-                <Button onClick={() => this.handleStartMainTimer()}>
-                  <i className="fa fa-angle-down"></i> Start Timer
-                </Button>
-                <Button onClick={pauseMainClock}>
-                  <i className="fa fa-angle-down"></i> Stop Timer
-                </Button>
+      <MaxWidthContainer>
+          <GoldenrodBorderedDiv id="quote-box" className="text-center">
+            <h3>break: {
+              !pomodoro ? ''
+              : Math.floor(pomodoro.breakClock/60) % 60 < 1 ? (pomodoro.breakClock % 60).toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false})
+              : Math.floor(pomodoro.breakClock/60) % 60 + ' : ' + (pomodoro.breakClock % 60).toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false})
+            }</h3>
+            <Button onClick={() => this.handleLoadBreakClock()}>Load break</Button>
+            <Button onClick={() => this.handleIncBreakClock(60)} bg='red5'>+</Button><Button onClick={() => this.handleDecBreakClock(60)} bg='green7'>-</Button>
+            <h3>session: {
+              !pomodoro ? ''
+              : Math.floor(pomodoro.sessionClock/60) % 60 < 1 ? (pomodoro.sessionClock % 60).toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false})
+              : Math.floor(pomodoro.sessionClock/60) % 60 + ' : ' + (pomodoro.sessionClock % 60).toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false})
+            }</h3>
+            <Button onClick={() => this.handleLoadSessionClock()}>Load session</Button>
+            <Button onClick={() => this.handleIncSessionClock(60)} bg='red5'>+</Button><Button onClick={() => this.handleDecSessionClock(60)} bg='green7'>-</Button>
+            <div className="wrapper" >
+              <div className="loading-wrapper">
+                <div className="loader">
+                  <Button onClick={() => this.handleStartMainTimer()}>
+                    <i className="fa fa-angle-down"></i> Start Timer
+                  </Button>
+                  <Button onClick={pauseMainClock}>
+                    <i className="fa fa-angle-down"></i> Stop Timer
+                  </Button>
+                </div>
               </div>
             </div>
-          </div>
-          <h2>Main</h2>
-          <CircleCard width={100}>{
-            !pomodoro ? ''
-            : Math.floor(pomodoro.mainClock/60) % 60 < 1 ? (pomodoro.mainClock % 60).toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false})
-            : Math.floor(pomodoro.mainClock/60) % 60 + ' : ' + (pomodoro.mainClock % 60).toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false})
-          }</CircleCard>
-        </GoldenrodBorderedDiv>
-        {pomodoro.mainClock <= 0 ? <BlinkerCircle bg='blue'>Something</BlinkerCircle> : ''}
-      </div>
+            <h2>Main</h2>
+            <CircleCard width={100}>{
+              !pomodoro ? ''
+              : Math.floor(pomodoro.mainClock/60) % 60 < 1 ? (pomodoro.mainClock % 60).toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false})
+              : Math.floor(pomodoro.mainClock/60) % 60 + ' : ' + (pomodoro.mainClock % 60).toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false})
+            }</CircleCard>
+          </GoldenrodBorderedDiv>
+          {pomodoro.mainClock <= 0 ? <BlinkerCircle bg='blue'>Something</BlinkerCircle> : ''}
+      </MaxWidthContainer>
     )
   }
 };

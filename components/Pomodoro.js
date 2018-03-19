@@ -1,15 +1,15 @@
-import React from 'react';
+import React from "react";
 
-import { render, findDOMNode } from 'react-dom';
+import { render, findDOMNode } from "react-dom";
 // import ReactTransitionGroup from 'react-addons-transition-group';
-import ReactTransitionGroupPlus from '../lib/animates/ReactTransitionGroupPlus';
-import animate from 'gsap-promise';
-import RadioGroup from 'react-radio-group';
-import Animates from '../lib/animates/animates';
+import ReactTransitionGroupPlus from "../lib/animates/ReactTransitionGroupPlus";
+import RadioGroup from "react-radio-group";
+import Animates from "../lib/animates/animates";
+// import { analyze } from "web-audio-beat-detector";
 
-import Sound from 'react-sound';
-import PropTypes from 'prop-types';
-import Link from 'next/link';
+import Sound from "react-sound";
+import PropTypes from "prop-types";
+import Link from "next/link";
 import {
   Avatar,
   BackgroundImage,
@@ -24,24 +24,26 @@ import {
   Pre,
   Small,
   Subhead,
-  Text,
-} from 'rebass';
+  Text
+} from "rebass";
 // import { getQuotes } from '../ducks/quotes';
-import PanelList from './PanelList';
-import { Col, Row } from 'react-styled-flexboxgrid';
-import styled, { injectGlobal } from 'styled-components';
+import PanelList from "./PanelList";
+import { Col, Row } from "react-styled-flexboxgrid";
+import styled, { injectGlobal } from "styled-components";
 
+// var bdSong = analyze("../static/sounds/plurnt.mp3")
+//   .then(tempo => {
+//     // the tempo could be analyzed
+//     console.log(tempo);
+//   })
+//   .catch(err => {
+//     // something went wrong
+//   });
 
 injectGlobal`
 
   .animates {
-    // position: absolute;
-    // top: 0;
-    // right: 0;
-    // bottom: 0;
-    // left: 0;
-    margin: auto;
-    width: 50px;
+    min-width: 300px;
     height: 50px;
     color: #000;
   }
@@ -195,8 +197,10 @@ const BlinkerCircle = styled(Card)`
   width: 200px;
   animation: blinker 1s linear infinite;
 
-  @keyframes blinker {  
-    50% { opacity: 0; }
+  @keyframes blinker {
+    50% {
+      opacity: 0;
+    }
   }
 `;
 
@@ -214,7 +218,7 @@ const BorderdCol = styled(Col)`
   border-bottom: 1px solid gray;
 `;
 
-const GrayBorder = 'border 1 px solid #eee';
+const GrayBorder = "border 1 px solid #eee";
 
 const GrayBorderRow = styled(Row)`
   // border 1px solid #eee;
@@ -225,16 +229,31 @@ const GoldenrodBorderAvatar = styled(Avatar)`
   box-shadow: 1px 1px 2px gray;
 `;
 
-const GoldenrodBorderedDiv = styled.div`
+const fizzyPlurnt = "./static/images/plurnt.jpeg";
+
+const GoldenrodBorderedDiv = styled(Card)`
   border: 3px solid goldenrod;
   box-shadow: 1px 1px 2px gray;
   min-height: 600px;
+  min-width: 800px;
+  background-size: 100%;
+`;
+
+const BlinkerDiv = styled(Card)`
+  border: 3px solid goldenrod;
+  color: white;
+  box-shadow: 1px 1px 2px gray;
+  min-width: 800px;
+  min-height: 600px;
+  background-image: url(${fizzyPlurnt});
+  background-repeat: no-repeat;
+  background-size: 100%;
 `;
 
 export class Pomodoro extends React.Component {
   componentDidMount() {
     const {
-      pomodoro, 
+      pomodoro,
       incSessionClock,
       decSessionClock,
       incBreakClock,
@@ -242,7 +261,7 @@ export class Pomodoro extends React.Component {
       pauseMainClock,
       loadBreakClock,
       loadSessionClock,
-      startMainClock,
+      startMainClock
     } = this.props;
     return;
   }
@@ -284,7 +303,7 @@ export class Pomodoro extends React.Component {
 
   render() {
     const {
-      pomodoro, 
+      pomodoro,
       incSessionClock,
       decSessionClock,
       incBreakClock,
@@ -292,82 +311,290 @@ export class Pomodoro extends React.Component {
       pauseMainClock,
       loadBreakClock,
       loadSessionClock,
-      startMainClock,
+      startMainClock
     } = this.props;
     const { mainClock, sessionClock, breakClock } = pomodoro;
-    return(
-      <MaxWidthContainer>
-          <GoldenrodBorderedDiv id="quote-box" className="text-center">
-            <h3>break: {
-              !pomodoro ? ''
-              : Math.floor(pomodoro.breakClock/60) % 60 < 1 ? (pomodoro.breakClock % 60).toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false})
-              : Math.floor(pomodoro.breakClock/60) % 60 + ' : ' + (pomodoro.breakClock % 60).toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false})
-            }</h3>
-            <Button onClick={() => this.handleLoadBreakClock()}>Load break</Button>
-            <Button onClick={() => this.handleIncBreakClock(60)} bg='red5'>+</Button><Button onClick={() => this.handleDecBreakClock(60)} bg='green7'>-</Button>
-            <h3>session: {
-              !pomodoro ? ''
-              : Math.floor(pomodoro.sessionClock/60) % 60 < 1 ? (pomodoro.sessionClock % 60).toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false})
-              : Math.floor(pomodoro.sessionClock/60) % 60 + ' : ' + (pomodoro.sessionClock % 60).toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false})
-            }</h3>
-            <Button onClick={() => this.handleLoadSessionClock()}>Load session</Button>
-            <Button onClick={() => this.handleIncSessionClock(60)} bg='red5'>+</Button><Button onClick={() => this.handleDecSessionClock(60)} bg='green7'>-</Button>
-            <div className="wrapper" >
-              <div className="loading-wrapper">
-                <div className="loader">
-                  <Button onClick={() => this.handleStartMainTimer()}>
-                    <i className="fa fa-angle-down"></i> Start Timer
+    const setMargin = { margin: "auto" };
+    let confirmClient = null;
+    if (process.browser) {
+      confirmClient = (
+        <ReactTransitionGroupPlus>
+          {!pomodoro ? (
+            ""
+          ) : pomodoro.mainClock <= 0 ? (
+            <Animates
+              key={mainClock}
+              className="makeTransparent"
+              enterDuration="0.8"
+              leaveDuration="0.3"
+              style={setMargin}
+              width={"900px"}
+            >
+              <BlinkerDiv>
+                <span>
+                  <h3>
+                    break:{" "}
+                    {!pomodoro
+                      ? ""
+                      : Math.floor(pomodoro.breakClock / 60) % 60 < 1
+                        ? (pomodoro.breakClock % 60).toLocaleString("en-US", {
+                            minimumIntegerDigits: 2,
+                            useGrouping: false
+                          })
+                        : Math.floor(pomodoro.breakClock / 60) % 60 +
+                          " : " +
+                          (pomodoro.breakClock % 60).toLocaleString("en-US", {
+                            minimumIntegerDigits: 2,
+                            useGrouping: false
+                          })}
+                  </h3>
+                  <Button onClick={() => this.handleLoadBreakClock()}>
+                    Load break
                   </Button>
-                  <Button onClick={pauseMainClock}>
-                    <i className="fa fa-angle-down"></i> Stop Timer
+                  <Button
+                    onClick={() => this.handleIncBreakClock(60)}
+                    bg="red5"
+                  >
+                    +
                   </Button>
-                </div>
-              </div>
-            </div>
-            <h2>Main</h2>
-            <CircleCard width={100}>
-              {
-                !pomodoro ? ''
-                : Math.floor(pomodoro.mainClock/60) % 60 < 1 ? (pomodoro.mainClock % 60).toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false})
-                : Math.floor(pomodoro.mainClock/60) % 60 + ' : ' + (pomodoro.mainClock % 60).toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false})
-              }
-            </CircleCard>
-            <ReactTransitionGroupPlus>
-              <Animates
-                key={mainClock}
-                className='makeTransparent'
-                enterDuration='0.8'
-                leaveDuration='0.3'
-              >
+                  <Button
+                    onClick={() => this.handleDecBreakClock(60)}
+                    bg="green7"
+                  >
+                    -
+                  </Button>
+                  <h3>
+                    session:{" "}
+                    {!pomodoro
+                      ? ""
+                      : Math.floor(pomodoro.sessionClock / 60) % 60 < 1
+                        ? (pomodoro.sessionClock % 60).toLocaleString("en-US", {
+                            minimumIntegerDigits: 2,
+                            useGrouping: false
+                          })
+                        : Math.floor(pomodoro.sessionClock / 60) % 60 +
+                          " : " +
+                          (pomodoro.sessionClock % 60).toLocaleString("en-US", {
+                            minimumIntegerDigits: 2,
+                            useGrouping: false
+                          })}
+                  </h3>
+                  <Button onClick={() => this.handleLoadSessionClock()}>
+                    Load session
+                  </Button>
+                  <Button
+                    onClick={() => this.handleIncSessionClock(60)}
+                    bg="red5"
+                  >
+                    +
+                  </Button>
+                  <Button
+                    onClick={() => this.handleDecSessionClock(60)}
+                    bg="green7"
+                  >
+                    -
+                  </Button>
+                  <div className="wrapper">
+                    <div className="loading-wrapper">
+                      <div className="loader">
+                        <Button onClick={() => this.handleStartMainTimer()}>
+                          <i className="fa fa-angle-down" /> Start Timer
+                        </Button>
+                        <Button onClick={pauseMainClock}>
+                          <i className="fa fa-angle-down" /> Stop Timer
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                  <h2>Main</h2>
 
-                {
-                  !pomodoro ? ''
-                  : pomodoro.mainClock <= 0
-                  ? <BlinkerCircle bg='blue'>
-                      Something
-                      <Sound
-                        url='../static/sounds/win.mp3'
-                        playStatus={Sound.status.PLAYING}
-                        playFromPosition={300}
-                        volume={70}
-                        loop={true}
-                        onLoading={({bytesLoaded, bytesTotal}) => console.log(`${bytesLoaded / bytesTotal * 100}% loaded`)}
-                        onPlaying={({position}) => console.log(position)}
-                        onPause={() => console.log('Paused')}
-                        onResume={() => console.log('Resumed')}
-                        onStop={() => console.log('Stopped')}
-                        onFinishedPlaying={() => this.setState({playStatus: Sound.status.STOPPED})} />
+                  <ReactTransitionGroupPlus>
+                    <Animates
+                      key={mainClock}
+                      className="makeTransparent"
+                      enterDuration="0.8"
+                      leaveDuration="0.3"
+                    >
+                      {!pomodoro ? (
+                        ""
+                      ) : pomodoro.mainClock <= 0 ? (
+                        <BlinkerCircle bg="blue">
+                          <Sound
+                            url="../static/sounds/plurnt.mp3"
+                            playStatus={Sound.status.PLAYING}
+                            playFromPosition={300}
+                            volume={70}
+                            loop={true}
+                            onLoading={({ bytesLoaded, bytesTotal }) =>
+                              console.log(
+                                `${bytesLoaded / bytesTotal * 100}% loaded`
+                              )
+                            }
+                            onPlaying={({ position }) => console.log(position)}
+                            onPause={() => console.log("Paused")}
+                            onResume={() => console.log("Resumed")}
+                            onStop={() => console.log("Stopped")}
+                            onFinishedPlaying={() =>
+                              this.setState({
+                                playStatus: Sound.status.STOPPED
+                              })
+                            }
+                          />
+                        </BlinkerCircle>
+                      ) : Math.floor(pomodoro.mainClock / 60) % 60 < 1 ? (
+                        (pomodoro.mainClock % 60).toLocaleString("en-US", {
+                          minimumIntegerDigits: 2,
+                          useGrouping: false
+                        })
+                      ) : (
+                        Math.floor(pomodoro.mainClock / 60) % 60 +
+                        " : " +
+                        (pomodoro.mainClock % 60).toLocaleString("en-US", {
+                          minimumIntegerDigits: 2,
+                          useGrouping: false
+                        })
+                      )}
+                    </Animates>
+                  </ReactTransitionGroupPlus>
+                </span>
+              </BlinkerDiv>
+            </Animates>
+          ) : (
+            <Animates>
+              <GoldenrodBorderedDiv id="quote-box">
+                <h3>
+                  break:{" "}
+                  {!pomodoro
+                    ? ""
+                    : Math.floor(pomodoro.breakClock / 60) % 60 < 1
+                      ? (pomodoro.breakClock % 60).toLocaleString("en-US", {
+                          minimumIntegerDigits: 2,
+                          useGrouping: false
+                        })
+                      : Math.floor(pomodoro.breakClock / 60) % 60 +
+                        " : " +
+                        (pomodoro.breakClock % 60).toLocaleString("en-US", {
+                          minimumIntegerDigits: 2,
+                          useGrouping: false
+                        })}
+                </h3>
+                <Button onClick={() => this.handleLoadBreakClock()}>
+                  Load break
+                </Button>
+                <Button onClick={() => this.handleIncBreakClock(60)} bg="red5">
+                  +
+                </Button>
+                <Button
+                  onClick={() => this.handleDecBreakClock(60)}
+                  bg="green7"
+                >
+                  -
+                </Button>
+                <h3>
+                  session:{" "}
+                  {!pomodoro
+                    ? ""
+                    : Math.floor(pomodoro.sessionClock / 60) % 60 < 1
+                      ? (pomodoro.sessionClock % 60).toLocaleString("en-US", {
+                          minimumIntegerDigits: 2,
+                          useGrouping: false
+                        })
+                      : Math.floor(pomodoro.sessionClock / 60) % 60 +
+                        " : " +
+                        (pomodoro.sessionClock % 60).toLocaleString("en-US", {
+                          minimumIntegerDigits: 2,
+                          useGrouping: false
+                        })}
+                </h3>
+                <Button onClick={() => this.handleLoadSessionClock()}>
+                  Load session
+                </Button>
+                <Button
+                  onClick={() => this.handleIncSessionClock(60)}
+                  bg="red5"
+                >
+                  +
+                </Button>
+                <Button
+                  onClick={() => this.handleDecSessionClock(60)}
+                  bg="green7"
+                >
+                  -
+                </Button>
+                <div className="wrapper">
+                  <div className="loading-wrapper">
+                    <div className="loader">
+                      <Button onClick={() => this.handleStartMainTimer()}>
+                        <i className="fa fa-angle-down" /> Start Timer
+                      </Button>
+                      <Button onClick={pauseMainClock}>
+                        <i className="fa fa-angle-down" /> Stop Timer
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+                <h2>Main</h2>
+
+                <ReactTransitionGroupPlus>
+                  <Animates
+                    key={mainClock}
+                    className="makeTransparent"
+                    enterDuration="0.8"
+                    leaveDuration="0.3"
+                    style={setMargin}
+                  >
+                    {!pomodoro ? (
+                      ""
+                    ) : pomodoro.mainClock <= 0 ? (
+                      <BlinkerCircle bg="blue">
+                        <Sound
+                          url="../static/sounds/plurnt.mp3"
+                          playStatus={Sound.status.PLAYING}
+                          playFromPosition={300}
+                          volume={70}
+                          loop={true}
+                          onLoading={({ bytesLoaded, bytesTotal }) =>
+                            console.log(
+                              `${bytesLoaded / bytesTotal * 100}% loaded`
+                            )
+                          }
+                          onPlaying={({ position }) => console.log(position)}
+                          onPause={() => console.log("Paused")}
+                          onResume={() => console.log("Resumed")}
+                          onStop={() => console.log("Stopped")}
+                          onFinishedPlaying={() =>
+                            this.setState({
+                              playStatus: Sound.status.STOPPED
+                            })
+                          }
+                        />
                       </BlinkerCircle>
-                  : Math.floor(pomodoro.mainClock/60) % 60 < 1 ? (pomodoro.mainClock % 60).toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false})
-                  : Math.floor(pomodoro.mainClock/60) % 60 + ' : ' + (pomodoro.mainClock % 60).toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false})
-                }
-              </Animates>
-            </ReactTransitionGroupPlus>
-          </GoldenrodBorderedDiv>
-      </MaxWidthContainer>
-    )
+                    ) : Math.floor(pomodoro.mainClock / 60) % 60 < 1 ? (
+                      (pomodoro.mainClock % 60).toLocaleString("en-US", {
+                        minimumIntegerDigits: 2,
+                        useGrouping: false
+                      })
+                    ) : (
+                      Math.floor(pomodoro.mainClock / 60) % 60 +
+                      " : " +
+                      (pomodoro.mainClock % 60).toLocaleString("en-US", {
+                        minimumIntegerDigits: 2,
+                        useGrouping: false
+                      })
+                    )}
+                  </Animates>
+                </ReactTransitionGroupPlus>
+              </GoldenrodBorderedDiv>
+            </Animates>
+          )}
+        </ReactTransitionGroupPlus>
+      );
+    } else {
+      confirmClient = <GoldenrodBorderedDiv>Loading...</GoldenrodBorderedDiv>;
+    }
+    return <MaxWidthContainer>{confirmClient}</MaxWidthContainer>;
   }
-};
+}
 
 Pomodoro.propTypes = {
   incSessionClock: PropTypes.func.isRequired,
@@ -381,8 +608,8 @@ Pomodoro.propTypes = {
   pomodoro: PropTypes.shape({
     sessionClock: PropTypes.number.isRequired,
     breakClock: PropTypes.number.isRequired,
-    mainClock: PropTypes.number.isRequired,
-  }),
-}
+    mainClock: PropTypes.number.isRequired
+  })
+};
 
 export default Pomodoro;
